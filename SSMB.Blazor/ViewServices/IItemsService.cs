@@ -13,6 +13,8 @@
         Task<Item[]> GetItemsMatchingFilter(string filter);
 
         Task<RecentItem[]> GetRecentlyUpdatedItems();
+
+        Task<Item[]> GetHotItems(int count);
     }
 
     internal abstract class ItemsServiceClientBased : IItemsService
@@ -37,6 +39,13 @@
                                   .GetJsonAsync<RecentItem[]>($"https://localhost:44327/api/v1/items/recent");
             return items;
         }
+
+        public virtual async Task<Item[]> GetHotItems(int count)
+        {
+            var items = await this.httpClientFactory.CreateClient()
+                                  .GetJsonAsync<Item[]>($"https://localhost:44327/api/v1/items/hot?count={count}");
+            return items;
+        }
     }
 
     internal class ItemsServiceServerBased : IItemsService
@@ -50,12 +59,17 @@
 
         public Task<Item[]> GetItemsMatchingFilter(string filter)
         {
-            return Task.Run(() => this.itemsController.Index(filter).ToArray());
+            return Task.Run(async () => (await this.itemsController.Index(filter)).ToArray());
         }
 
         public Task<RecentItem[]> GetRecentlyUpdatedItems()
         {
             return Task.Run(async () => (await this.itemsController.Recent()).ToArray());
+        }
+
+        public Task<Item[]> GetHotItems(int count)
+        {
+            return Task.Run(async () => (await this.itemsController.Hot()).ToArray());
         }
     }
 }

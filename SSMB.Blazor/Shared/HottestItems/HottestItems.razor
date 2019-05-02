@@ -1,0 +1,37 @@
+﻿@inject IHottestItemsViewModel ViewModel
+
+<h1>Popular Items</h1>
+<table class="recent-items">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewModel.Items != null)
+    {
+        foreach (var item in ViewModel.Items)
+        {
+            <tr>
+                <td class="results-item-rarity"></td>
+                <td>@item.Name</td>
+                <td>@item.Type</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+@functions {
+
+    protected override Task OnInitAsync()
+    {
+        ViewModel.WhenItemsChanged
+                 .Subscribe(_ => { Invoke(StateHasChanged); });
+
+        return Task.CompletedTask;
+    }
+
+}

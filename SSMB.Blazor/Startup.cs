@@ -5,8 +5,7 @@ namespace SSMB.Blazor
     using System.Reflection;
     using Application.Infrastructure;
     using Application.Interfaces;
-    using Application.Items.Queries.GetHotItems;
-    using Domain;
+    using Application.Items.Queries.GetRecentItems;
     using Filters;
     using Hangfire;
     using Hangfire.SqlServer;
@@ -20,13 +19,13 @@ namespace SSMB.Blazor
     using Server.API.V1;
     using Services;
     using Shared;
+    using Shared.HottestItems;
     using Shared.ItemsResults;
     using Shared.ItemsSearch;
     using Shared.RecentItems;
     using SQL;
     using ViewServices;
     using ViewServices.Defaults;
-    using GetRecentItemsQuery = Application.Items.Queries.GetRecentItems.GetRecentItemsQuery;
 
     public class Startup
     {
@@ -98,6 +97,7 @@ namespace SSMB.Blazor
             services.AddTransient<IItemsResultsViewModel, ItemsResultsViewModel>();
             services.AddTransient<IMainLayoutViewModel, MainLayoutViewModel>();
             services.AddTransient<IRecentItemsViewModel, RecentItemsViewModel>();
+            services.AddTransient<IHottestItemsViewModel, HottestItemsViewModel>();
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();
