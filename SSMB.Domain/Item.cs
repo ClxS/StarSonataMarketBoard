@@ -7,6 +7,7 @@
         public long Cost { get; set; }
 
         public string Description { get; set; }
+
         public int ItemId { get; set; }
 
         public string Name { get; set; }
