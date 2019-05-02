@@ -1,0 +1,28 @@
+﻿
+.search-container {
+    display: flex;
+    background: #363f51;
+    background: -moz-linear-gradient(top,#363f51 0,#323c47 100%);
+    background: -webkit-linear-gradient(top,#363f51,#323c47);
+    background: linear-gradient(180deg,#363f51 0,#323c47);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px #000;
+    overflow: hidden;
+    width:400px;
+    background-color: transparent;
+    margin-left:50px;
+}
+
+.search-container input {
+    flex-grow: 1;
+}
+
+.search-container button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.search-container button:hover {
+    background-color: transparent;
+    border: transparent;
+}

@@ -1,0 +1,109 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--foreground)
+}
+
+app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+html, body, app, .app-wrapper {
+    min-width:100vw;
+    min-height:100vh;
+    padding:0;
+    margin:0;
+}
+
+header {
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+table {
+    background-color: var(--table-background);
+    border: none;
+}
+
+table thead tr {
+    background-color: var(--table-header-background);
+    border: none;
+}
+
+td {
+    padding: 5px;
+    border: none;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+button,
+input[type=text] {
+    border: 0;
+    font: 100 1em Arial;
+    padding: 12px;
+    background: #363f51;
+    background: -moz-linear-gradient(top,#363f51 0,#323c47 100%);
+    background: -webkit-linear-gradient(top,#363f51,#323c47);
+    background: linear-gradient(180deg,#363f51 0,#323c47);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px #000;
+    color: var(--dimforeground)
+}
+
+button {
+    color: var(--foreground)
+}
+
+button:hover,
+button:active,
+input[type=text]:hover,
+input[type=text]:active {
+    /* background: #272e3c; */
+    background: -moz-linear-gradient(top,#272e3c 0,#252b31 100%);
+    background: -webkit-linear-gradient(top,#272e3c,#252b31);
+    background: linear-gradient(180deg,#272e3c 0,#252b31);
+    color: var(--foreground)
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .main .top-row {
+        position: sticky;
+        top: 0;
+    }
+
+    .main > div {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+}

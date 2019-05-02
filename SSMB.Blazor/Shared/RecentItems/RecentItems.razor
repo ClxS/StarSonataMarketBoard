@@ -1,0 +1,46 @@
+﻿@inject IRecentItemsViewModel ViewModel
+    <h1>Recent Items</h1>
+    <table class="recent-items">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Date Updated</th>
+                <th>Max. Purchase Price</th>
+                <th># Purchases on Market</th>
+                <th>Min. Sale Price</th>
+                <th># Sales on Market</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewModel.Results != null)
+            {
+                foreach (var item in ViewModel.Results)
+                {
+                    <tr>
+                        <td class="results-item-rarity"></td>
+                        <td>@item.Item.Name</td>
+                        <td>@item.DateChecked.ToString("dd MMMM hh:mm tt")</td>
+                        <td>@item.LastHighestPurchasePrice?.ToString("N0")</td>
+                        <td>@(item.PurchaseQuantity?.ToString("N0") ?? "-")</td>
+                        <td>@item.LastLowestSalePrice?.ToString("N0")</td>
+                        <td>@(item.SaleQuantity?.ToString("N0") ?? "-")</td>
+                        <td>@item.Item.Type</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+@functions {
+
+    protected override Task OnInitAsync()
+    {
+        ViewModel.WhenResultsChanged
+                 .Subscribe(_ => { Invoke(StateHasChanged); });
+
+        return Task.CompletedTask;
+    }
+
+}

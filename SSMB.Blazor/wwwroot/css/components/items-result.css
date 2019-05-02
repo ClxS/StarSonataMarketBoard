@@ -1,0 +1,26 @@
+﻿.item-results-wrapper {
+    position: absolute;
+    top: 55px;
+    left: 50px;
+    background-color: #283146;
+    width: 500px;
+    padding: 11px;
+    display:flex;
+    flex-direction:column;
+}
+.item-results-wrapper .results-item {
+    display: flex;
+    flex-direction: row;
+}
+.item-results-wrapper .results-item-rarity {
+    width: 5px;
+    height: 100%;
+}
+.item-results-wrapper .results-item-name {
+    flex-grow: 1;
+}
+.item-results-wrapper .results-item-type {
+    max-width: 135px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

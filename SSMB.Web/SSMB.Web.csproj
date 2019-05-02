@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>c22b8246-6366-43cf-82e0-93681055008e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="Hangfire" Version="1.7.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\ssbg.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SSMB.DataCollection\SSMB.DataCollection.csproj" />
+    <ProjectReference Include="..\SSMB.SQL\SSMB.SQL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Include="**\*.cshtml" />
+    <Watch Include="**\*.razor" />
+  </ItemGroup>
+</Project>

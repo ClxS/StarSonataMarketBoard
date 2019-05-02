@@ -1,0 +1,9 @@
+
+{
+    "region" : "us-east-2",
+    "profile" : "default",
+    "configuration" : "Release",
+    "tag"           : "starsonatamarketboard:latest",
+    "docker-build-working-dir" : "",
+    "vstoolkit-deployment-mode" : "PushOnly"
+}

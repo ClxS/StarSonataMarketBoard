@@ -1,0 +1,19 @@
+@using SSMB.Blazor.Shared.ItemsResults
+@using SSMB.Blazor.Shared.ItemsSearch
+
+<header>
+    <ItemsSearch />
+    <ItemsResults />
+</header>
+
+@functions {
+    bool collapseNavMenu = false;
+
+    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

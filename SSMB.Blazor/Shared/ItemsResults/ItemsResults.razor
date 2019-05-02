@@ -1,0 +1,33 @@
+﻿@inject IItemsResultsViewModel ViewModel
+
+@if (ViewModel.IsVisible && ViewModel.Results != null)
+{
+    <div onclick="@ViewModel.OnWrapperClick" class="item-results-wrapper">
+        @foreach (var item in ViewModel.Results)
+        {
+            <div class="results-item">
+                <div class="results-item-rarity"></div>
+                <div class="results-item-name">
+                    @item.Name
+                </div>
+                <div class="results-item-type">
+                    @item.Type
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@functions {
+
+    protected override Task OnInitAsync()
+    {
+        ViewModel.WhenVisibilityChanged
+                 .Subscribe(_ => { Invoke(StateHasChanged); });
+        ViewModel.WhenResultsChanged
+                 .Subscribe(_ => { Invoke(StateHasChanged); });
+
+        return Task.CompletedTask;
+    }
+
+}

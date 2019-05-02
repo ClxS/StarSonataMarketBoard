@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SSMB.Domain\SSMB.Domain.csproj" />
+    <ProjectReference Include="..\SSMB.SQL\SSMB.SQL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- HACK: Work around dotnet/sdk#2976 in dependencies -->
+    <BundledNETCorePlatformsPackageVersion>$(MicrosoftNETCorePlatformsPackageVersion)</BundledNETCorePlatformsPackageVersion>
+  </PropertyGroup>
+
+  <!-- This is required to workaround overlap between System.Collections.Generic.IAsyncEnumerable in System.Runtime and System.Interactive.Async. -->
+  <Target Name="AddAssemblyAliasToReactiveAsync"
+          AfterTargets="ResolveAssemblyReferences"
+          Condition=" '$(TargetFramework)' != '' AND ( '$(TargetFramework)' == 'netcoreapp3.0' OR '$(TargetFramework)' == 'netstandard2.1' ) ">
+    <ItemGroup>
+      <ReferencePath Condition=" '%(FileName)' == 'System.Interactive.Async' ">
+        <Aliases>reactive</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
+</Project>
