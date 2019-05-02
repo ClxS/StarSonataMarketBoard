@@ -8,7 +8,6 @@ namespace SSMB.Blazor
     using Application.Items.Queries.GetHotItems;
     using Domain;
     using Filters;
-    using FluentValidation.AspNetCore;
     using Hangfire;
     using Hangfire.SqlServer;
     using MediatR;
@@ -89,8 +88,7 @@ namespace SSMB.Blazor
             services.AddServerSideBlazor();
             services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                     .AddApplicationPart(typeof(ItemsController).Assembly)
-                    .AddControllersAsServices()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetHotItemsQueryValidator>());
+                    .AddControllersAsServices();
             this.RegisterBlazorTypes(services);
         }
 
