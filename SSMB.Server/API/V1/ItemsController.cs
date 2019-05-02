@@ -6,6 +6,8 @@
     using System.Web.Http;
     using Application.Interfaces;
     using Application.Items.Models;
+    using Application.Items.Queries.GetHotItems;
+    using Application.Items.Queries.GetItems;
     using Application.Items.Queries.GetRecentItems;
     using Domain;
     using MediatR;
@@ -22,17 +24,21 @@
         }
 
         [System.Web.Http.HttpGet]
-        public IEnumerable<Item> Index([FromQuery] string filter)
+        public async Task<IEnumerable<Item>> Index([FromQuery] string filter, [FromQuery] int count = 20)
         {
-            //var items = this.dbContext.Items.Where(x => EF.Functions.Like(x.Name, $"%{filter}%")).ToArray();
-            //return items;
-            return null;
+            return await this.mediator.Send(new GetItemsQuery { Filter = filter, Count = count });
         }
 
         [System.Web.Http.HttpGet]
         public async Task<IEnumerable<RecentItem>> Recent()
         {
             return await this.mediator.Send(new GetRecentItemsQuery());
+        }
+
+        [System.Web.Http.HttpGet]
+        public async Task<IEnumerable<Item>> Hot()
+        {
+            return await this.mediator.Send(new GetHotItemsQuery());
         }
     }
 }
