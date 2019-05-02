@@ -5,9 +5,10 @@ namespace SSMB.Blazor
     using System.Reflection;
     using Application.Infrastructure;
     using Application.Interfaces;
-    using Application.Items.Queries.GetRecentItems;
+    using Application.Items.Queries.GetHotItems;
     using Domain;
     using Filters;
+    using FluentValidation.AspNetCore;
     using Hangfire;
     using Hangfire.SqlServer;
     using MediatR;
@@ -26,6 +27,7 @@ namespace SSMB.Blazor
     using SQL;
     using ViewServices;
     using ViewServices.Defaults;
+    using GetRecentItemsQuery = Application.Items.Queries.GetRecentItems.GetRecentItemsQuery;
 
     public class Startup
     {
@@ -87,7 +89,8 @@ namespace SSMB.Blazor
             services.AddServerSideBlazor();
             services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                     .AddApplicationPart(typeof(ItemsController).Assembly)
-                    .AddControllersAsServices();
+                    .AddControllersAsServices()
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<GetHotItemsQueryValidator>());
             this.RegisterBlazorTypes(services);
         }
 
