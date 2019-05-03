@@ -2,15 +2,21 @@
     position: absolute;
     top: 55px;
     left: 50px;
-    background-color: #283146;
+    background-color: #363f51;
     width: 500px;
-    padding: 11px;
-    display:flex;
-    flex-direction:column;
+    border-bottom: 5px solid #191d23;
+    border-top: 5px solid #191d23;
+    border-left: 2px solid #191d23;
+    border-right: 2px solid #191d23;
+    max-height: 50vh;
+    overflow-y: scroll;
 }
 .item-results-wrapper .results-item {
     display: flex;
     flex-direction: row;
+    border-bottom: 1px solid #111111;
+    vertical-align: middle;
+    padding: 6px;
 }
 .item-results-wrapper .results-item-rarity {
     width: 5px;
@@ -23,4 +29,9 @@
     max-width: 135px;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+item-results-wrapper .results-item:hover {
+    background-color: #23212b;
+    cursor: pointer;
 }
