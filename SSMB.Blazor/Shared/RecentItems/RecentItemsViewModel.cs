@@ -4,15 +4,19 @@
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using Application.Items.Models;
+    using Microsoft.AspNetCore.Components;
+    using Microsoft.AspNetCore.Http.Extensions;
     using ViewServices;
 
     class RecentItemsViewModel : IRecentItemsViewModel
     {
+        private readonly IUriHelper uriHelper;
         private readonly Subject<RecentItem[]> resultsChangedSubject;
         private RecentItem[] results;
 
-        public RecentItemsViewModel(IItemsService itemsService)
+        public RecentItemsViewModel(IItemsService itemsService, IUriHelper uriHelper)
         {
+            this.uriHelper = uriHelper;
             this.resultsChangedSubject = new Subject<RecentItem[]>();
             itemsService.GetRecentlyUpdatedItems().ContinueWith(items => { this.Results = items.Result; });
         }
@@ -28,5 +32,10 @@
         }
 
         public IObservable<RecentItem[]> WhenResultsChanged => this.resultsChangedSubject.AsObservable();
+
+        public void OnItemClicked(in int itemId)
+        {
+            this.uriHelper.NavigateTo($"/Item?id={itemId}");
+        }
     }
 }

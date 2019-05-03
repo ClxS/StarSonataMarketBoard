@@ -9,5 +9,7 @@
         RecentItem[] Results { get; }
 
         IObservable<RecentItem[]> WhenResultsChanged { get; }
+
+        void OnItemClicked(in int itemItemId);
     }
 }
