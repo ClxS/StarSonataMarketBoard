@@ -47,7 +47,7 @@
                 this.incomingMessages.Enqueue((TextMessage)msg);
             });
 
-            //this.api.Connect();
+            this.api.Connect();
             Task.Run(this.AnalyseRequests);
         }
 
@@ -68,7 +68,7 @@
             Ready,
         }
 
-        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(2);
+        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(0.8);
 
         private EAppState AppState { get; set; } = EAppState.WaitingForLogin;
 
