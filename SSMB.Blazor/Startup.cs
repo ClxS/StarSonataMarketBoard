@@ -16,6 +16,8 @@ namespace SSMB.Blazor
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Pages.Item;
+    using Pages.Item.LatestHistory;
     using Server.API.V1;
     using Services;
     using Shared;
@@ -98,6 +100,8 @@ namespace SSMB.Blazor
             services.AddTransient<IMainLayoutViewModel, MainLayoutViewModel>();
             services.AddTransient<IRecentItemsViewModel, RecentItemsViewModel>();
             services.AddTransient<IHottestItemsViewModel, HottestItemsViewModel>();
+            services.AddTransient<IItemViewModel, ItemViewModel>();
+            services.AddTransient<ILatestHistoryViewModel, LatestHistoryViewModel>(); 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();

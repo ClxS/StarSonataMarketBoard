@@ -1,0 +1,29 @@
+﻿.item .type-image {
+    width:100px;
+    height:100px;
+}
+
+.item .detail {
+    flex-grow:1;
+}
+
+.item .detail .title {
+    margin: 0;
+}
+
+.item .detail .minor-detail {
+    font-size: 0.7em;
+}
+
+.item .detail .minor-detail > div {
+    margin-right: 20px;
+    display: inline-block;
+}
+
+.item .tab-bar .tab-item {
+    display: inline-block;
+}
+
+.item .indented {
+    margin-left: 20px;
+}

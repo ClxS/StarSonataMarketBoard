@@ -2,6 +2,11 @@
     width: 100%;
 }
 
+table.recent-items tr:hover {
+    background-color: #191616;
+    cursor: pointer;
+}
+
 .recent-items > th, .recent-items > td {
     padding: 5px;
 }

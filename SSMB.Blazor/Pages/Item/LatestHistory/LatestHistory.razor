@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Components
+@using SSMB.Application.Items.Models
+@using SSMB.Domain
+@inject ILatestHistoryViewModel ViewModel
+
+<div>
+    <table>
+        <thead>
+            <td></td>
+            <td>Galaxy</td>
+            <td>Base</td>
+            <td>Price</td>
+            <td>Quantity</td>
+        </thead>
+        <tbody>
+            @foreach(var order in ViewModel.OrderedPurchaseEntries)
+            {
+            <tr>
+                <td></td>
+                <td>@order.GalaxyName</td>
+                <td>@order.BaseName</td>
+                <td>@order.Price.ToString("N0")</td>
+                <td>@((order.Quantity == int.MaxValue) ? "∞" : order.Quantity.ToString("N0"))</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@functions {
+    [Parameter]
+    private FullDetailItem Item { get; set; }
+
+    [Parameter]
+    private OrderType Type { get; set; }
+
+    protected override void OnInit()
+    {
+        this.ViewModel.WhenOrderedEntriesUpdated.Subscribe(_ => Invoke(StateHasChanged));
+    }
+
+    protected override void OnParametersSet()  
+    {  
+        ViewModel.SetDetails(this.Type, this.Item);
+    } 
+}

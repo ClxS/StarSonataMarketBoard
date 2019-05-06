@@ -1,0 +1,103 @@
+﻿@page "/Item"
+@using System.Reactive.Disposables
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Http.Extensions
+@using SSMB.Blazor.Pages.Item.LatestHistory
+@using SSMB.Blazor.Shared.ItemsSearch
+@using SSMB.Domain
+@inject IUriHelper UriHelper
+@inject IItemViewModel ViewModel
+
+<div class="item">
+    <div style="display: flex;">
+        <div class="type-image"></div>
+        <div style="display: flex;flex-grow:1; flex-direction: column;padding-left:20px">
+            <div class="detail">
+                <div>
+                    <h1 class="title">
+                        @(ViewModel.ItemDetail?.Item?.Name ?? "<Unknown>")
+                    </h1>
+                    <div class="minor-detail">
+                        <div>
+                            Size: @((ViewModel?.ItemDetail?.Item?.Space ?? 0) == 0 ? 1 : ViewModel?.ItemDetail?.Item?.Space)
+                        </div>
+                        <div>
+                            Weight: @(ViewModel?.ItemDetail?.Item?.Weight ?? 0)
+                        </div>
+                        @if ((ViewModel?.ItemDetail?.Item?.ScrapValue ?? -1) != -1)
+                        {
+                            <div>
+                                Scrap Value: @(ViewModel?.ItemDetail?.Item?.ScrapValue.ToString("N0"))
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item">Market</div>
+                <div class="tab-item">Alerts</div>
+                <div class="tab-item">
+                    <input type="checkbox" bind="@ViewModel.ShowStats" /> Show Stats
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewModel.ShowStats && ViewModel.ItemDetail?.Item != null)
+    {
+        <div>
+            @foreach (var entry in ViewModel.ItemDetail.Item.Description.Split("\n"))
+            {
+                <div class="@(entry.StartsWith(" ") ? "indented" : "")">@entry</div>
+            }
+        </div>
+    }
+
+    <div style="display: grid; grid-auto-columns: 1fr 15px 1fr">
+        <div style="grid-column:1">
+            <h1>Cheapest Sale Prices</h1>
+            <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Selling" />
+        </div>
+        <div style="grid-column:3">
+            <h1>Highest Purchase Prices</h1>
+            <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Purchase" />
+        </div>
+    </div>
+</div>
+
+@functions {
+    private int Id { get; set; }
+
+    private CompositeDisposable subscriptions;
+
+    protected override void OnInit()
+    {
+        RefreshType();
+        subscriptions = new CompositeDisposable();
+        UriHelper.OnLocationChanged += OnLocationChanges;
+        subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ => Invoke(StateHasChanged)));
+        subscriptions.Add(this.ViewModel.WhenShowStatsChanged.Subscribe(_ => Invoke(StateHasChanged)));
+    }
+
+    private void OnLocationChanges(object sender, string location) => RefreshType();
+
+    private void RefreshType()
+    {
+        var uri = new Uri(UriHelper.GetAbsoluteUri());
+        var idStr = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var idParam) ? idParam.First() : "";
+        if (!int.TryParse(idStr, out var id))
+        {
+            return;
+        }
+
+        this.Id = id;
+        ViewModel.ItemId = id;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        UriHelper.OnLocationChanged -= OnLocationChanges;
+        this.subscriptions.Dispose();
+    }
+}
