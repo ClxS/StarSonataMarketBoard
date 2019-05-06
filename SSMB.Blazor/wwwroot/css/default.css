@@ -29,6 +29,7 @@ table {
     background-color: var(--table-background);
     border: none;
     border-spacing: 0;
+    width: 100%;
 }
 
 table thead tr {
