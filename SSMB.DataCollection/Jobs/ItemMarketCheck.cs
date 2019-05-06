@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Application.Interfaces;
@@ -26,34 +27,32 @@
 
         public async Task DoItemMarketCheck(string name)
         {
-            return;
-            using (var dbContext = this.dbContextFactory())
+            using var dbContext = this.dbContextFactory();
+            var item = dbContext.Items.FirstOrDefault(i => i.Name == name);
+            if (item == null)
             {
-                var item = dbContext.Items.FirstOrDefault(i => i.Name == name);
-                if (item == null)
+                RecurringJob.RemoveIfExists(GetJobName(name));
+                throw new KeyNotFoundException($"Could not find item {name} in database. Task has been removed.");
+            }
+
+            var result = await this.marketCheckService.RequestMarketCheck(name);
+            if (result != null && result.Length > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Updated Prices on item: {name}");
+                Debug.WriteLine($"Updated Prices on item: {name}");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                var batch = new OrderBatch()
                 {
-                    RecurringJob.RemoveIfExists(GetJobName(name));
-                    throw new KeyNotFoundException($"Could not find item {name} in database. Task has been removed.");
-                }
+                    Date = DateTime.Now,
+                    Item = item,
+                    ItemId = item.ItemId,
+                    Entries = result
+                };
 
-                var result = await this.marketCheckService.RequestMarketCheck(name);
-                if (result != null && result.Length > 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Updated Prices on item: {name}");
-                    Console.ForegroundColor = ConsoleColor.White;
-
-                    var batch = new OrderBatch()
-                    {
-                        Date = DateTime.Now,
-                        Item = item,
-                        ItemId = item.ItemId,
-                        Entries = result
-                    };
-
-                    dbContext.OrderBatch.Add(batch);
-                    await dbContext.SaveChangesAsync();
-                }
+                dbContext.OrderBatch.Add(batch);
+                await dbContext.SaveChangesAsync();
             }
         }
     }

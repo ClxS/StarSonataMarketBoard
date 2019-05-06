@@ -1,6 +1,7 @@
 ﻿namespace SSMB.DataCollection.Jobs
 {
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
     using Application.Interfaces;
     using Domain;
@@ -26,30 +27,33 @@
             var result = await this.marketCheckService.RequestMarketCheckWithDescription(name);
             if (result.orders != null && result.orders.Length > 0)
             {
-                using (var dbContext = this.dbContextFactory())
+                using var dbContext = this.dbContextFactory();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Added Item: {name}");
+                Debug.WriteLine($"Added Item: {name}");
+                Console.ForegroundColor = ConsoleColor.White;
+                RecurringJob.AddOrUpdate<ItemMarketCheck>(ItemMarketCheck.GetJobName(name),
+                    (job) => job.DoItemMarketCheck(name), CronUtility.GetRandom12HourCron(), null, "update_mc");
+
+                var item = new Item()
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Added Item: {name}");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    RecurringJob.AddOrUpdate<ItemMarketCheck>(ItemMarketCheck.GetJobName(name),
-                        (job) => job.DoItemMarketCheck(name), CronUtility.GetRandom12HourCron(), null, "update_mc");
+                    Name = name,
+                    Description = result.description,
+                    StructuredDescription = structuredDescription,
+                    Cost = cost,
+                    Type = type,
+                    Weight = weight,
+                    Space = (int)space,
+                    ScrapValue = result.scrapValue,
+                    Quality = quality
+                };
 
-                    var item = new Item()
-                    {
-                        Name = name,
-                        Description = result.description,
-                        StructuredDescription = structuredDescription,
-                        Cost = cost,
-                        Type = type,
-                        Weight = weight,
-                        Space = (int)space,
-                        ScrapValue = result.scrapValue,
-                        Quality = quality
-                    };
-
-                    dbContext.AddOrUpdateItem(item);
-                    await dbContext.SaveChangesAsync();
-                }
+                dbContext.AddOrUpdateItem(item);
+                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                Debug.WriteLine($"Item not found - not adding to SSMB: {name}");
             }
         }
     }

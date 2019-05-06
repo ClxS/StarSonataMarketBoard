@@ -27,7 +27,6 @@
         [Queue("gather_checkable")]
         public async Task DoFindItemsToCheckExist()
         {
-            return;
             using var dbContext = this.dbContextFactory();
             foreach (var provider in this.itemProviders)
             {
