@@ -16,9 +16,9 @@
 
             builder.Property(e => e.Date).IsRequired();
 
-            builder.HasMany(e => e.Entries).WithOne(o => o.Batch).HasForeignKey("BatchId").IsRequired();
+            builder.HasMany(e => e.Entries).WithOne(o => o.Batch).HasForeignKey(o => o.BatchId).IsRequired();
 
-            builder.HasMany(e => e.LtsEntries).WithOne(o => o.Batch).HasForeignKey("BatchId").IsRequired();
+            builder.HasMany(e => e.LtsEntries).WithOne(o => o.Batch).HasForeignKey(o => o.BatchId).IsRequired();
 
             builder.HasOne(e => e.Item).WithMany(i => i.Orders);
 
