@@ -1,5 +1,6 @@
 ﻿namespace SSMB.Application.Items.Queries.GetRecentItems
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -49,6 +50,7 @@
                 }
             }
 
+            Array.ForEach(recentItems, i => i.Item.StructuredDescription = string.Empty);
             return recentItems;
         }
     }

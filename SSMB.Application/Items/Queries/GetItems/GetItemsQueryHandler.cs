@@ -1,5 +1,6 @@
 ﻿namespace SSMB.Application.Items.Queries.GetItems
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -19,8 +20,10 @@
 
         public async Task<Item[]> Handle(GetItemsQuery request, CancellationToken cancellationToken)
         {
-            return await this.dbContext.Items.Where(x => EF.Functions.Like(x.Name, $"%{request.Filter}%"))
+            var items = await this.dbContext.Items.Where(x => EF.Functions.Like(x.Name, $"%{request.Filter}%"))
                              .ToArrayAsync(cancellationToken);
+            Array.ForEach(items, i => i.StructuredDescription = string.Empty);
+            return items;
         }
     }
 }

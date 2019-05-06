@@ -1,5 +1,6 @@
 ﻿namespace SSMB.Application.Items.Queries.GetRecentItems
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -25,6 +26,7 @@
                                   .Where(i => i.Orders.Any())
                                   .Take(request.Count)
                                   .ToArrayAsync(cancellationToken);
+            Array.ForEach(items, i => i.StructuredDescription = string.Empty);
             return items;
         }
     }
