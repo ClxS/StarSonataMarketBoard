@@ -48,9 +48,11 @@
             this.StartListening(this.Socket);
         }
 
-        public void SendMessage(IOutgoingMessage message)
+        public Task SendMessageAsync(IOutgoingMessage message)
         {
+            // TODO - Make async
             this.Socket.Send(message.GetOutData());
+            return Task.CompletedTask;
         }
 
         private void DataHandler(Socket socket)

@@ -133,7 +133,7 @@
                 msg =>
                 {
                     var ping = (Ping)msg;
-                    StarSonataCommClient.Client.SendMessage(new Pong(ping.Sec, ping.USec));
+                    StarSonataCommClient.Client.SendMessageAsync(new Pong(ping.Sec, ping.USec));
                 });
 
             // Login as the first available character
@@ -141,7 +141,7 @@
                 msg =>
                 {
                     var characterList = (CharacterList)msg;
-                    StarSonataCommClient.Client.SendMessage(new SelectCharacter(characterList.Characters.First()));
+                    StarSonataCommClient.Client.SendMessageAsync(new SelectCharacter(characterList.Characters.First()));
                 });
         }
 
@@ -199,11 +199,10 @@
 
             private string Message { get; }
 
-            public Task Do(StarSonataCommClient commClient)
+            public async Task Do(StarSonataCommClient commClient)
             {
-                StarSonataCommClient.Client.SendMessage(new TextMessageOut(new ChatMessage
+                await StarSonataCommClient.Client.SendMessageAsync(new TextMessageOut(new ChatMessage
                     { Channel = this.Channel, Message = this.Message }));
-                return Task.CompletedTask;
             }
         }
 
@@ -226,7 +225,7 @@
 
             public async Task Do(StarSonataCommClient commClient)
             {
-                StarSonataCommClient.Client.SendMessage(
+                await StarSonataCommClient.Client.SendMessageAsync(
                     new ChatClientLogin(new User
                         { Username = this.Username, Password = this.Password }));
                 this.taskCompletionSource.SetResult(null);
@@ -242,10 +241,9 @@
                 this.message = message;
             }
 
-            public Task Do(StarSonataCommClient commClient)
+            public async Task Do(StarSonataCommClient commClient)
             {
-                StarSonataCommClient.Client.SendMessage(this.message);
-                return Task.CompletedTask;
+                await StarSonataCommClient.Client.SendMessageAsync(this.message);
             }
         }
     }
