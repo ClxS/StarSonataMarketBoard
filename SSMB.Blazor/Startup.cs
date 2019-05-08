@@ -13,6 +13,7 @@ namespace SSMB.Blazor
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Migrations;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -31,9 +32,24 @@ namespace SSMB.Blazor
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private string dbConnectionKey = string.Empty;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
+            if (env.IsDevelopment())
+            {
+                // ReSharper disable once ArrangeThisQualifier
+                dbConnectionKey = "SSMBDatabaseDev";
+            }
+            else if (env.IsStaging())
+            {
+                this.dbConnectionKey = "SSMBDatabaseStaging";
+            }
+            else if (env.IsProduction())
+            {
+                this.dbConnectionKey = "SSMBDatabaseProduction";
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -81,7 +97,7 @@ namespace SSMB.Blazor
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
             services.AddDbContext<ISsmbDbContext, SsmbDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("SSMBDatabase")));
+                options.UseSqlServer(this.Configuration.GetConnectionString(this.dbConnectionKey)));
             this.RegisterHangfireTypes(services);
             this.RegisterMediatRType(services);
             services.AddHttpClient();
@@ -91,6 +107,7 @@ namespace SSMB.Blazor
                     .AddApplicationPart(typeof(ItemsController).Assembly)
                     .AddControllersAsServices();
             this.RegisterBlazorTypes(services);
+
         }
 
         private void RegisterBlazorTypes(IServiceCollection services)
@@ -109,8 +126,8 @@ namespace SSMB.Blazor
 
         private void RegisterHangfireTypes(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString("SSMBDatabase")));
-            JobStorage.Current = new SqlServerStorage(this.Configuration.GetConnectionString("SSMBDatabase"),
+            services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString(this.dbConnectionKey)));
+            JobStorage.Current = new SqlServerStorage(this.Configuration.GetConnectionString(this.dbConnectionKey),
                 new SqlServerStorageOptions());
         }
 

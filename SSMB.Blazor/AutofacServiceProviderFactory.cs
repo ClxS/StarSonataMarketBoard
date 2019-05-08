@@ -1,8 +1,8 @@
 ﻿namespace SSMB.Blazor
 {
     using System;
-    using Alexinea.Autofac.Extensions.DependencyInjection;
     using Autofac;
+    using Autofac.Extensions.DependencyInjection;
     using Hangfire;
     using Microsoft.Extensions.DependencyInjection;
 
