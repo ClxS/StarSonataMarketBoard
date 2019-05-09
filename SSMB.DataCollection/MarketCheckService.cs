@@ -85,7 +85,7 @@
             {
                 var doneEvent = new ManualResetEvent(false);
                 OrderEntry[] data = null;
-                using var subscribe = request.UpdateSubject.Subscribe(md =>
+                using var _ = request.UpdateSubject.Subscribe(md =>
                 {
                     data = md.orders;
                     doneEvent.Set();
