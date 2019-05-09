@@ -32,24 +32,11 @@ namespace SSMB.Blazor
 
     public class Startup
     {
-        private string dbConnectionKey = string.Empty;
+        private const string DbConnectionKey = "SSMBDatabase";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
-            if (env.IsDevelopment())
-            {
-                // ReSharper disable once ArrangeThisQualifier
-                dbConnectionKey = "SSMBDatabaseDev";
-            }
-            else if (env.IsStaging())
-            {
-                this.dbConnectionKey = "SSMBDatabaseStaging";
-            }
-            else if (env.IsProduction())
-            {
-                this.dbConnectionKey = "SSMBDatabaseProduction";
-            }
         }
 
         public IConfiguration Configuration { get; }
@@ -97,7 +84,7 @@ namespace SSMB.Blazor
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
             services.AddDbContext<ISsmbDbContext, SsmbDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString(this.dbConnectionKey)));
+                options.UseSqlServer(this.Configuration.GetConnectionString(DbConnectionKey)));
             this.RegisterHangfireTypes(services);
             this.RegisterMediatRType(services);
             services.AddHttpClient();
@@ -126,8 +113,8 @@ namespace SSMB.Blazor
 
         private void RegisterHangfireTypes(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString(this.dbConnectionKey)));
-            JobStorage.Current = new SqlServerStorage(this.Configuration.GetConnectionString(this.dbConnectionKey),
+            services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString(DbConnectionKey)));
+            JobStorage.Current = new SqlServerStorage(this.Configuration.GetConnectionString(DbConnectionKey),
                 new SqlServerStorageOptions());
         }
 

@@ -10,4 +10,4 @@ sleep 1
 done
 
 >&2 echo "SQL Server is up"
-#exec $run_cmd
+exec $run_cmd
