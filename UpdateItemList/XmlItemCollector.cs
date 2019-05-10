@@ -1,22 +1,20 @@
-﻿namespace SSMB.DataCollection.Items
+﻿namespace UpdateItemListTask
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Xml;
-    using Domain;
-    using Utility;
 
-    internal class XmlFileItemProvider : IItemProvider
+    class XmlItemCollector
     {
-        private readonly string root;
+        private string root;
 
-        public XmlFileItemProvider(string root)
+        public XmlItemCollector(string root)
         {
             this.root = root;
         }
 
-        public async IAsyncEnumerable<(string name, ItemType type, long cost, long weight, long space, Quality quality,
+        public IEnumerable<(string name, string type, long cost, long weight, long space, string quality,
             IDictionary<string, string> values)> GetItems()
         {
             foreach (var filePath in Directory.EnumerateFiles(this.root, "*.xml", SearchOption.AllDirectories))
@@ -49,7 +47,7 @@
                 var cost = 0L;
                 var weight = 0L;
                 var space = 0L;
-                Quality? quality = null;
+                string quality = null;
                 var values = new Dictionary<string, string>();
 
 
@@ -57,7 +55,7 @@
                 {
                     try
                     {
-                        if (!await reader.ReadAsync())
+                        if (!reader.Read())
                         {
                             break;
                         }
@@ -116,7 +114,7 @@
                                         space = (long)(float.Parse(reader.Value.Replace("_", string.Empty)));
                                         break;
                                     case "QUALITY":
-                                        quality = XmlEnumConversions.QualityFromString(reader.Value);
+                                        quality = reader.Value;
                                         break;
                                 }
                             }
@@ -139,9 +137,9 @@
 
                             if (reader.Name.Equals(outerElement))
                             {
-                                var type = XmlEnumConversions.ItemTypeFromString(typeStr);
+                                var type = typeStr;
                                 yield return (name, type, cost, weight, space,
-                                    quality.HasValue ? quality.Value : Quality.Common, values);
+                                    string.IsNullOrEmpty(quality) ? "COMMON" : quality, values);
                             }
 
                             break;
