@@ -7,14 +7,15 @@ COPY . ./
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/core/sdk AS update-env
-COPY . .
-RUN chmod +x ./entrypoint.sh
+#FROM mcr.microsoft.com/dotnet/core/sdk AS update-env
+#COPY . .
 
-EXPOSE 80
-EXPOSE 443
-CMD /bin/bash ./entrypoint.sh
+#RUN chmod +x ./entrypoint.sh
+#CMD /bin/bash ./entrypoint.sh
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS runtime-env
 COPY --from=build-env /out .
+
+EXPOSE 80
+EXPOSE 443
 ENTRYPOINT ["dotnet", "SSMB.Blazor.dll"]

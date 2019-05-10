@@ -17,6 +17,7 @@ namespace SSMB.Blazor
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
     using Pages.Item;
     using Pages.Item.LatestHistory;
     using Server.API.V1;
@@ -73,6 +74,11 @@ namespace SSMB.Blazor
                 endpoints.MapControllerRoute("default", "api/v1/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                ((SsmbDbContext)scope.ServiceProvider.GetService<ISsmbDbContext>()).Database.Migrate();
+            }
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -93,11 +99,11 @@ namespace SSMB.Blazor
             services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                     .AddApplicationPart(typeof(ItemsController).Assembly)
                     .AddControllersAsServices();
-            this.RegisterBlazorTypes(services);
+            RegisterBlazorTypes(services);
 
         }
 
-        private void RegisterBlazorTypes(IServiceCollection services)
+        private static void RegisterBlazorTypes(IServiceCollection services)
         {
             services.AddTransient<IItemSearchViewModel, ItemsSearchViewModel>();
             services.AddTransient<IItemsResultsViewModel, ItemsResultsViewModel>();
