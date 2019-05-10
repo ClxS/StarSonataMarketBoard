@@ -1,6 +1,6 @@
-﻿namespace SSMB.DataCollection.Utility
+﻿namespace UpdateItemListTask
 {
-    using Domain;
+    using SSMB.Domain;
 
     public static class XmlEnumConversions
     {

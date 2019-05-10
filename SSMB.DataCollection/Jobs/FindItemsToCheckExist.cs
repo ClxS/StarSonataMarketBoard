@@ -27,10 +27,12 @@
         [Queue("gather_checkable")]
         public async Task DoFindItemsToCheckExist()
         {
+            Console.WriteLine("Starting Job: FindItemsToCheckExist");
+
             using var dbContext = this.dbContextFactory();
             foreach (var provider in this.itemProviders)
             {
-                await foreach (var item in provider.GetItems())
+                foreach (var item in provider.GetItems())
                 {
                     if (!dbContext.Items.Any(i => i.Name == item.name))
                     {

@@ -8,9 +8,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<XmlFileItemProvider>().As<IItemProvider>().WithParameter(
-                new TypedParameter(typeof(string),
-                    "Z:\\Projects\\StarSonataSVN\\Dev\\ssserver\\server\\data\\items"));
+            builder.RegisterType<TemporaryItemsProvider>().As<IItemProvider>();
             builder.RegisterType<DataCollection.DataCollectionService>().AsImplementedInterfaces();
             builder.RegisterType<StarSonataApi>().SingleInstance()
                    .WithParameter(new TypedParameter(typeof(string), "liberty.starsonata.com"));

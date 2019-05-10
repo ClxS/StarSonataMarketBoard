@@ -1,6 +1,9 @@
 ﻿namespace SSMB.DataCollection.Utility
 {
+    extern alias reactive;
     using System;
+    using System.Threading.Tasks;
+    using reactive::System.Collections.Generic;
 
     public class CronUtility
     {

@@ -5,7 +5,6 @@
 
     public interface IItemProvider
     {
-        IAsyncEnumerable<(string name, ItemType type, long cost, long weight, long space, Quality quality,
-            IDictionary<string, string> values)> GetItems();
+        IEnumerable<(string name, ItemType type, long cost, long weight, long space, Quality quality, IDictionary<string, string> values)> GetItems();
     }
 }

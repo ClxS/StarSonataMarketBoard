@@ -27,6 +27,8 @@
 
         public async Task DoItemMarketCheck(string name)
         {
+            Console.WriteLine("Starting Job: ItemMarketCheck");
+
             using var dbContext = this.dbContextFactory();
             var item = dbContext.Items.FirstOrDefault(i => i.Name == name);
             if (item == null)
