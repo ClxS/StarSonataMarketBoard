@@ -10,6 +10,6 @@
 
         IObservable<RecentItem[]> WhenResultsChanged { get; }
 
-        void OnItemClicked(in int itemItemId);
+        void OnItemClicked(int itemItemId);
     }
 }

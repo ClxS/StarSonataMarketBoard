@@ -33,7 +33,7 @@
 
         public IObservable<RecentItem[]> WhenResultsChanged => this.resultsChangedSubject.AsObservable();
 
-        public void OnItemClicked(in int itemId)
+        public void OnItemClicked(int itemId)
         {
             this.uriHelper.NavigateTo($"/Item?id={itemId}");
         }
