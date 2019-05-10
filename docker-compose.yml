@@ -10,6 +10,8 @@ services:
             - ASPNETCORE_ENVIRONMENT=Staging
     db:
         image: "mcr.microsoft.com/mssql/server"
+        ports:
+            - "1443:1443"
         environment:
             SA_PASSWORD: "Your_password123"
             ACCEPT_EULA: "Y"
