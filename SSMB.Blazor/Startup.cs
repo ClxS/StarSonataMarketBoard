@@ -1,8 +1,11 @@
 namespace SSMB.Blazor
 {
     using System;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Reflection;
+    using System.Security.Claims;
+    using System.Text.Json;
     using Application.Infrastructure;
     using Application.Interfaces;
     using Application.Items.Queries.GetRecentItems;
@@ -10,19 +13,25 @@ namespace SSMB.Blazor
     using Hangfire;
     using Hangfire.SqlServer;
     using MediatR;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.OAuth;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Migrations;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json.Linq;
     using Pages.Item;
     using Pages.Item.LatestHistory;
     using Server.API.V1;
     using Services;
     using Shared;
+    using Shared.AccountPanel;
     using Shared.HottestItems;
     using Shared.ItemsResults;
     using Shared.ItemsSearch;
@@ -59,6 +68,7 @@ namespace SSMB.Blazor
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
+            app.UseAuthentication();
 
             var options = new BackgroundJobServerOptions
             {
@@ -96,11 +106,49 @@ namespace SSMB.Blazor
             services.AddHttpClient();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
                     .AddApplicationPart(typeof(ItemsController).Assembly)
                     .AddControllersAsServices();
-            RegisterBlazorTypes(services);
+            services.AddAuthentication(
+                        (options) =>
+                        {
+                            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                            options.DefaultChallengeScheme = "Discord";
+                        })
+                        .AddCookie()
+                        .AddOAuth("Discord", options =>
+                        {
+                            options.ClientId = this.Configuration["Discord:ClientId"];
+                            options.ClientSecret = this.Configuration["Discord:ClientSecret"];
+                            options.CallbackPath = new PathString("/discord-auth");
+                            options.Scope.Add("identify");
+                            options.AuthorizationEndpoint = "https://discordapp.com/api/oauth2/authorize";
+                            options.TokenEndpoint = "https://discordapp.com/api/oauth2/token";
+                            options.UserInformationEndpoint = "https://discordapp.com/api/users/@me";
 
+                            options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                            options.ClaimActions.MapJsonKey(ClaimTypes.Name, "username");
+                            options.ClaimActions.MapJsonKey("urn:discord:avatar", "avatar");
+
+                            options.Events = new OAuthEvents
+                            {
+                                OnCreatingTicket = async context =>
+                                {
+                                    var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+                                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+
+                                    var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
+                                    response.EnsureSuccessStatusCode();
+
+                                    var user = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                                    context.RunClaimActions(user.RootElement);
+                                }
+                            };
+                        });
+            RegisterBlazorTypes(services);
         }
 
         private static void RegisterBlazorTypes(IServiceCollection services)
@@ -111,7 +159,8 @@ namespace SSMB.Blazor
             services.AddTransient<IRecentItemsViewModel, RecentItemsViewModel>();
             services.AddTransient<IHottestItemsViewModel, HottestItemsViewModel>();
             services.AddTransient<IItemViewModel, ItemViewModel>();
-            services.AddTransient<ILatestHistoryViewModel, LatestHistoryViewModel>(); 
+            services.AddTransient<ILatestHistoryViewModel, LatestHistoryViewModel>();
+            services.AddTransient<IAccountPanelViewModel, AccountPanelViewModel>(); 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();

@@ -1,0 +1,10 @@
+﻿@inject IAccountPanelViewModel ViewModel
+
+@if (ViewModel.IsUserAuthenticated)
+{
+    <span>Welcome!</span>
+}
+else
+{
+    <button onclick="@ViewModel.OnLoginClicked">Login with Discord</button>
+}

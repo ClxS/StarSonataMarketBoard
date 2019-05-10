@@ -4,7 +4,9 @@
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using Application.Items.Models;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Components;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Extensions;
     using ViewServices;
 

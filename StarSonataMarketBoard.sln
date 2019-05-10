@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSMB.Application", "SSMB.Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{962580C4-445C-478F-AAF9-FEC2D4BA6500}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateItemList", "UpdateItemList\UpdateItemList.csproj", "{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpdateItemList", "UpdateItemList\UpdateItemList.csproj", "{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

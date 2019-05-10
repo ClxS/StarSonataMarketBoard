@@ -1,0 +1,31 @@
+﻿@page "/Login"
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IUriHelper UriHelper
+
+@functions {
+    private bool shouldRedirect = false;
+
+    protected override async Task OnInitAsync()
+    {
+        if (!HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        {
+            await HttpContextAccessor.HttpContext.ChallengeAsync();
+        }
+        else
+        {
+            shouldRedirect = true;
+        }
+    }
+
+    protected override void OnAfterRender()
+    {
+        if (shouldRedirect)
+        {
+            UriHelper.NavigateTo("/", true);
+        }
+    }
+
+}
