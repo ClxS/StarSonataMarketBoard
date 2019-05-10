@@ -73,13 +73,15 @@
         {
             while (true)
             {
+                Console.WriteLine("Attempting to connect to Star Sonata");
                 try
                 {
                     StarSonataCommClient.Client.Connect();
                     break;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.Error.WriteLine("Unable to connect: " + e);
                     Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                 }
             }
