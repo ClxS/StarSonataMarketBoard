@@ -19,6 +19,7 @@ namespace SSMB.Blazor
                     {
                         var env = context.HostingEnvironment;
                         config.AddJsonFile("appsettings.json", true, true)
+                              .AddJsonFile($"appsettings.Secrets.json", true, true)
                               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
                         config.AddEnvironmentVariables();
                     });

@@ -37,3 +37,5 @@ msbuild.wrn
 packages/
 
 ![Pp]rebuilt
+
+SSMB\.Blazor/appsettings\.Secrets\.json
