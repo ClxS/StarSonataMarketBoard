@@ -17,6 +17,10 @@
     border-bottom: 1px solid #111111;
     vertical-align: middle;
     padding: 6px;
+    cursor: pointer;
+}
+.item-results-wrapper .results-item:hover {
+    background-color: #191616
 }
 .item-results-wrapper .results-item-rarity {
     width: 5px;
