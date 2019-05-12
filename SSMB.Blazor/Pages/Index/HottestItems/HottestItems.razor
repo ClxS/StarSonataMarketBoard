@@ -14,7 +14,7 @@
     {
         foreach (var item in ViewModel.Items)
         {
-            <tr onclick="@(() => ViewModel.OnItemClicked(item.Item.ItemId))">
+            <tr onclick="@(() => ViewModel.OnItemClicked(item.ItemId))">
                 <td class="results-item-rarity"></td>
                 <td>@item.Name</td>
                 <td>@item.Type</td>
