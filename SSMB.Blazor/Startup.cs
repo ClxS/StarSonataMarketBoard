@@ -26,6 +26,7 @@ namespace SSMB.Blazor
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Linq;
+    using Pages.CreateAlert;
     using Pages.Index.HottestItems;
     using Pages.Index.RecentItems;
     using Pages.Item;
@@ -160,12 +161,13 @@ namespace SSMB.Blazor
             services.AddTransient<IHottestItemsViewModel, HottestItemsViewModel>();
             services.AddTransient<IItemViewModel, ItemViewModel>();
             services.AddTransient<ILatestHistoryViewModel, LatestHistoryViewModel>();
-            services.AddTransient<IAccountPanelViewModel, AccountPanelViewModel>(); 
+            services.AddTransient<IAccountPanelViewModel, AccountPanelViewModel>();
+            services.AddTransient<ICreateAlertViewModel, CreateAlertViewModel>(); 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();
         }
-
+        
         private void RegisterHangfireTypes(IServiceCollection services)
         {
             services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString(DbConnectionKey)));
