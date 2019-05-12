@@ -39,14 +39,14 @@
 
         private IEnumerable<OrderEntry> GetUnorderedEntries()
         {
-            if (this.ItemDetails == null)
+            if (this.ItemDetails?.LatestOrder == null)
             {
                 return Enumerable.Empty<OrderEntry>();
             }
 
             return this.OrderType == OrderType.Purchase
-                ? ItemDetails.LatestOrder.PurchaseEntries
-                : ItemDetails.LatestOrder.SaleEntries;
+                ? this.ItemDetails.LatestOrder.PurchaseEntries
+                : this.ItemDetails.LatestOrder.SaleEntries;
         }
     }
 }
