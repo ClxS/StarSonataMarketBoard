@@ -3,6 +3,7 @@
     using Application.Interfaces;
     using Domain;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Diagnostics;
 
     public class SsmbDbContext : DbContext, ISsmbDbContext
     {
@@ -18,6 +19,12 @@
         public DbSet<OrderBatch> OrderBatch { get; set; }
 
         public DbSet<OrderEntry> OrderEntry { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.QueryClientEvaluationWarning));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
