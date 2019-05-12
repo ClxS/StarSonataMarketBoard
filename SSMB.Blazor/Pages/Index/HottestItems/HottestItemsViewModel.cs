@@ -1,18 +1,21 @@
-﻿namespace SSMB.Blazor.Shared.HottestItems
+﻿namespace SSMB.Blazor.Pages.Index.HottestItems
 {
     using System;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using Domain;
+    using Microsoft.AspNetCore.Components;
     using ViewServices;
 
     class HottestItemsViewModel : IHottestItemsViewModel
     {
         private readonly Subject<Item[]> itemsSubject = new Subject<Item[]>();
+        private readonly IUriHelper uriHelper;
         private Item[] items;
 
-        public HottestItemsViewModel(IItemsService itemsService)
+        public HottestItemsViewModel(IItemsService itemsService, IUriHelper uriHelper)
         {
+            this.uriHelper = uriHelper;
             itemsService.GetHotItems(20).ContinueWith(items => { this.Items = items.Result; });
         }
 
@@ -27,5 +30,10 @@
         }
 
         public IObservable<Item[]> WhenItemsChanged => this.itemsSubject.AsObservable();
+
+        public void OnItemClicked(int itemId)
+        {
+            this.uriHelper.NavigateTo($"/Item?id={itemId}");
+        }
     }
 }

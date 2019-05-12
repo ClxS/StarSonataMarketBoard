@@ -1,5 +1,4 @@
-﻿@using SSMB.Blazor.Shared.HottestItems
-@inject IHottestItemsViewModel ViewModel
+﻿@inject IHottestItemsViewModel ViewModel
 
 <h1>Popular Items</h1>
 <table class="recent-items">
@@ -15,7 +14,7 @@
     {
         foreach (var item in ViewModel.Items)
         {
-            <tr>
+            <tr onclick="@(() => ViewModel.OnItemClicked(item.Item.ItemId))">
                 <td class="results-item-rarity"></td>
                 <td>@item.Name</td>
                 <td>@item.Type</td>

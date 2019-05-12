@@ -1,8 +1,7 @@
-﻿namespace SSMB.Blazor.Shared.RecentItems
+﻿namespace SSMB.Blazor.Pages.Index.RecentItems
 {
     using System;
     using Application.Items.Models;
-    using Domain;
 
     public interface IRecentItemsViewModel
     {

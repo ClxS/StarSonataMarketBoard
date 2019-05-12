@@ -4,6 +4,10 @@
     {
         bool IsUserAuthenticated { get; }
 
+        string UserName { get; }
+
         void OnLoginClicked();
+
+        void OnAlertsClicked();
     }
 }

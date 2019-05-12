@@ -89,7 +89,8 @@ input[type=text] {
 }
 
 button {
-    color: var(--foreground)
+    color: var(--foreground);
+    cursor: pointer;
 }
 
 button:hover,

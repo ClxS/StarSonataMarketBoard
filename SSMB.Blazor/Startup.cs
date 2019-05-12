@@ -26,16 +26,16 @@ namespace SSMB.Blazor
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Linq;
+    using Pages.Index.HottestItems;
+    using Pages.Index.RecentItems;
     using Pages.Item;
     using Pages.Item.LatestHistory;
     using Server.API.V1;
     using Services;
     using Shared;
     using Shared.AccountPanel;
-    using Shared.HottestItems;
     using Shared.ItemsResults;
     using Shared.ItemsSearch;
-    using Shared.RecentItems;
     using SQL;
     using ViewServices;
     using ViewServices.Defaults;

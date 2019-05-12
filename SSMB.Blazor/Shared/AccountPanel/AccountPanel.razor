@@ -2,9 +2,26 @@
 
 @if (ViewModel.IsUserAuthenticated)
 {
-    <span>Welcome!</span>
+    <div class="button-tray">
+        <button onclick="@this.OnLoginNameClicked">@ViewModel.UserName</button>
+        @if (this.IsButtonTrayExpanded)
+        {
+            <button onclick="@ViewModel.OnAlertsClicked">Alerts</button>
+        }
+    </div>
 }
 else
 {
     <button onclick="@ViewModel.OnLoginClicked">Login with Discord</button>
+}
+
+@functions {
+
+    public bool IsButtonTrayExpanded { get; set; }
+
+    public void OnLoginNameClicked()
+    {
+        IsButtonTrayExpanded = !IsButtonTrayExpanded;
+    }
+
 }
