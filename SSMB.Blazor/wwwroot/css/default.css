@@ -74,6 +74,7 @@ th {
     color: red;
 }
 
+select,
 button,
 input[type=text] {
     border: 0;
@@ -102,6 +103,11 @@ input[type=text]:active {
     background: -webkit-linear-gradient(top,#272e3c,#252b31);
     background: linear-gradient(180deg,#272e3c 0,#252b31);
     color: var(--foreground)
+}
+
+option {
+    background-color: #363f51;
+    border: 0;
 }
 
 @media (min-width: 768px) {

@@ -7,6 +7,7 @@
 @import "components/nav-menu.css";
 @import "components/recent-items.css";
 @import "components/accounts-panel.css";
+@import "components/create-alert.css";
 
 body {
 }
