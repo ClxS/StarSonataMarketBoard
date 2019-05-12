@@ -6,7 +6,7 @@
     <div onclick="@ViewModel.OnWrapperClick" class="item-results-wrapper">
         @foreach (var item in ViewModel.Results)
         {
-            <div class="results-item">
+            <div class="results-item" onclick="@(() => ViewModel.OnItemClicked(item.ItemId))">
                 <div class="results-item-rarity"></div>
                 <div class="results-item-name">
                     @item.Name

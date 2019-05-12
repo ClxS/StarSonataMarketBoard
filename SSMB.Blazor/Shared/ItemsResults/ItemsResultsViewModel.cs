@@ -5,22 +5,25 @@
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
     using Domain;
+    using Microsoft.AspNetCore.Components;
     using Services;
     using ViewServices;
 
     class ItemsResultsViewModel : IItemsResultsViewModel
     {
         private readonly INavigationService navigationService;
+        private readonly IUriHelper uriHelper;
         private readonly ISearchService searchService;
 
         private readonly Subject<bool> visibilityChangeSubject;
 
         private bool isVisible = true;
 
-        public ItemsResultsViewModel(ISearchService searchService, INavigationService navigationService)
+        public ItemsResultsViewModel(ISearchService searchService, INavigationService navigationService, IUriHelper uriHelper)
         {
             this.searchService = searchService;
             this.navigationService = navigationService;
+            this.uriHelper = uriHelper;
             this.visibilityChangeSubject = new Subject<bool>();
             searchService.WhenSearchMarkedVisible.Subscribe(_ => { this.IsVisible = true; });
             navigationService.WhenBubblePreventingElementClicked.Subscribe(o =>
@@ -59,6 +62,12 @@
         public void OnWrapperClick()
         {
             this.navigationService.Click(this);
+        }
+
+        public void OnItemClicked(int itemId)
+        {
+            this.uriHelper.NavigateTo($"/Item?id={itemId}");
+            this.IsVisible = false;
         }
     }
 }

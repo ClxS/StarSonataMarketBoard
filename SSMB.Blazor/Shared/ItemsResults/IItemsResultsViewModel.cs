@@ -14,5 +14,7 @@
         IObservable<bool> WhenVisibilityChanged { get; }
 
         void OnWrapperClick();
+
+        void OnItemClicked(int itemItemId);
     }
 }
