@@ -17,5 +17,7 @@
         bool ShowAlerts { get; set; }
 
         IObservable<FullDetailItem> WhenItemDetailsUpdated { get; }
+
+        IObservable<Alert[]> WhenAlertsUpdated { get; }
     }
 }

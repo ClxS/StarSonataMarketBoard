@@ -8,6 +8,7 @@
     using System.Security.Claims;
     using Application.Items.Models;
     using Domain;
+    using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Http;
     using ViewServices;
 
@@ -15,6 +16,7 @@
     {
         private readonly IAlertsService alertsService;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IUriHelper uriHelper;
         private readonly Subject<FullDetailItem> itemDetailsSubject;
 
         private readonly IItemsService itemsService;
@@ -25,12 +27,16 @@
 
         private int? itemId;
 
-        public CreateAlertViewModel(IItemsService itemsService, IAlertsService alertsService,
-            IHttpContextAccessor httpContextAccessor)
+        public CreateAlertViewModel(
+            IItemsService itemsService,
+            IAlertsService alertsService,
+            IHttpContextAccessor httpContextAccessor,
+            IUriHelper uriHelper)
         {
             this.itemsService = itemsService;
             this.alertsService = alertsService;
             this.httpContextAccessor = httpContextAccessor;
+            this.uriHelper = uriHelper;
             this.itemDetailsSubject = new Subject<FullDetailItem>();
         }
 
@@ -76,7 +82,15 @@
                 var id = identity.Claims.FirstOrDefault(c => c.Type.EndsWith("nameidentifier"));
                 if (long.TryParse(id?.Value ?? "-", out var idValue))
                 {
-                    this.alertsService.CreateAlert(idValue, this.ItemId.Value, this.AlertName, this.Conditions);
+                    this.alertsService.CreateAlert(idValue, this.ItemId.Value, this.AlertName, this.Conditions)
+                        .ContinueWith(
+                            t =>
+                            {
+                                if (t.IsCompletedSuccessfully)
+                                {
+                                    this.uriHelper.NavigateTo($"Item?id={this.ItemId}&showAlerts=1");
+                                }
+                            });
                 }
             }
         }

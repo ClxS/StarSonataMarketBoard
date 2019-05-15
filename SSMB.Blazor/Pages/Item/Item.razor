@@ -87,7 +87,20 @@
         RefreshType();
         subscriptions = new CompositeDisposable();
         UriHelper.OnLocationChanged += OnLocationChanges;
-        subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ => Invoke(StateHasChanged)));
+        subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ =>
+        {
+            if (ViewModel.ShowStats)
+            {
+                Invoke(StateHasChanged);
+            }
+        }));
+        subscriptions.Add(this.ViewModel.WhenAlertsUpdated.Subscribe(_ =>
+        {
+            if (ViewModel.ShowAlerts)
+            {
+                Invoke(StateHasChanged);
+            }
+        }));
     }
 
     private void OnLocationChanges(object sender, string location) => RefreshType();
@@ -95,7 +108,8 @@
     private void RefreshType()
     {
         var uri = new Uri(UriHelper.GetAbsoluteUri());
-        var idStr = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var idParam) ? idParam.First() : "";
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+        var idStr = query.TryGetValue("id", out var idParam) ? idParam.First() : "";
         if (!int.TryParse(idStr, out var id))
         {
             return;
@@ -103,6 +117,7 @@
 
         this.Id = id;
         ViewModel.ItemId = id;
+        ViewModel.ShowAlerts = query.TryGetValue("showAlerts", out var _);
         StateHasChanged();
     }
 

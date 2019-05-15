@@ -13,6 +13,7 @@
     class ItemViewModel : IItemViewModel
     {
         private readonly Subject<FullDetailItem> itemDetailsSubject;
+        private readonly Subject<Alert[]> alertsSubject;
         private readonly IItemsService itemsService;
         private readonly IAlertsService alertsService;
         private readonly IHttpContextAccessor httpContextAccessor;
@@ -27,6 +28,7 @@
             this.alertsService = alertsService;
             this.httpContextAccessor = httpContextAccessor;
             this.itemDetailsSubject = new Subject<FullDetailItem>();
+            this.alertsSubject = new Subject<Alert[]>();
         }
 
         public FullDetailItem ItemDetail
@@ -52,16 +54,19 @@
                     this.itemsService.GetItemDetails(value.Value).ContinueWith(t => { this.ItemDetail = t.Result; });
 
                     var identity = this.httpContextAccessor?.HttpContext?.User?.Identity as ClaimsIdentity;
-                    if (identity?.IsAuthenticated ?? false)
+                    if (!(identity?.IsAuthenticated ?? false))
                     {
-                        var id = identity.Claims.FirstOrDefault(c => c.Type.EndsWith("nameidentifier"));
-                        if (long.TryParse(id?.Value ?? "-", out var idValue))
+                        return;
+                    }
+
+                    var id = identity.Claims.FirstOrDefault(c => c.Type.EndsWith("nameidentifier"));
+                    if (long.TryParse(id?.Value ?? "-", out var idValue))
+                    {
+                        this.alertsService.GetAlerts(value.Value, idValue).ContinueWith(t =>
                         {
-                            this.alertsService.GetAlerts(value.Value, idValue).ContinueWith(t =>
-                            {
-                                this.Alerts = t.Result;
-                            });
-                        }
+                            this.Alerts = t.Result;
+                            this.alertsSubject.OnNext(this.Alerts);
+                        });
                     }
                 }
             }
@@ -72,5 +77,7 @@
         public bool ShowAlerts { get; set; }
 
         public IObservable<FullDetailItem> WhenItemDetailsUpdated => this.itemDetailsSubject.AsObservable();
+
+        public IObservable<Alert[]> WhenAlertsUpdated => this.alertsSubject.AsObservable();
     }
 }
