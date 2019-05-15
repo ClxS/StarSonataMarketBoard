@@ -1,15 +1,13 @@
-﻿namespace SSMB.Application.Items.Queries.GetRecentItems
+﻿namespace SSMB.Application.Items.Queries.GetHotItems
 {
     using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Domain;
-    using GetHotItems;
     using Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Models;
 
     class GetHotItemsQueryHandler : IRequestHandler<GetHotItemsQuery, Item[]>
     {

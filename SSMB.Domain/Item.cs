@@ -14,6 +14,8 @@
 
         public ICollection<OrderBatch> Orders { get; set; }
 
+        public ICollection<Alert> Alerts { get; set; }
+
         public Quality Quality { get; set; }
 
         public long ScrapValue { get; set; }

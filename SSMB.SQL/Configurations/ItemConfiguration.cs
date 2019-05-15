@@ -46,6 +46,12 @@
                 .WithOne(o => o.Item)
                 .IsRequired()
                 .HasForeignKey(o => o.ItemId);
+
+            builder
+                .HasMany(e => e.Alerts)
+                .WithOne(o => o.Item)
+                .IsRequired()
+                .HasForeignKey(o => o.ItemId);
         }
     }
 }

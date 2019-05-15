@@ -1,28 +1,32 @@
 ﻿namespace SSMB.Blazor.Pages.Item
 {
     using System;
+    using System.Linq;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
+    using System.Security.Claims;
     using Application.Items.Models;
+    using Domain;
+    using Microsoft.AspNetCore.Http;
     using ViewServices;
 
     class ItemViewModel : IItemViewModel
     {
         private readonly Subject<FullDetailItem> itemDetailsSubject;
         private readonly IItemsService itemsService;
-
-        private readonly Subject<bool> showStatsChangedSubject;
+        private readonly IAlertsService alertsService;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         private FullDetailItem itemDetail;
 
         private int? itemId;
-        private bool showStats;
 
-        public ItemViewModel(IItemsService itemsService)
+        public ItemViewModel(IItemsService itemsService, IAlertsService alertsService, IHttpContextAccessor httpContextAccessor)
         {
             this.itemsService = itemsService;
+            this.alertsService = alertsService;
+            this.httpContextAccessor = httpContextAccessor;
             this.itemDetailsSubject = new Subject<FullDetailItem>();
-            this.showStatsChangedSubject = new Subject<bool>();
         }
 
         public FullDetailItem ItemDetail
@@ -35,6 +39,8 @@
             }
         }
 
+        public Alert[] Alerts { get; set; }
+
         public int? ItemId
         {
             get => this.itemId;
@@ -44,27 +50,27 @@
                 if (value.HasValue)
                 {
                     this.itemsService.GetItemDetails(value.Value).ContinueWith(t => { this.ItemDetail = t.Result; });
+
+                    var identity = this.httpContextAccessor?.HttpContext?.User?.Identity as ClaimsIdentity;
+                    if (identity?.IsAuthenticated ?? false)
+                    {
+                        var id = identity.Claims.FirstOrDefault(c => c.Type.EndsWith("nameidentifier"));
+                        if (long.TryParse(id?.Value ?? "-", out var idValue))
+                        {
+                            this.alertsService.GetAlerts(value.Value, idValue).ContinueWith(t =>
+                            {
+                                this.Alerts = t.Result;
+                            });
+                        }
+                    }
                 }
             }
         }
 
-        public bool ShowStats
-        {
-            get => this.showStats;
-            set
-            {
-                if (this.showStats.Equals(value))
-                {
-                    return;
-                }
+        public bool ShowStats { get; set; }
 
-                this.showStats = value;
-                this.showStatsChangedSubject.OnNext(value);
-            }
-        }
+        public bool ShowAlerts { get; set; }
 
         public IObservable<FullDetailItem> WhenItemDetailsUpdated => this.itemDetailsSubject.AsObservable();
-
-        public IObservable<bool> WhenShowStatsChanged => this.showStatsChangedSubject.AsObservable();
     }
 }

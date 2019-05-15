@@ -8,62 +8,74 @@
 @inject IUriHelper UriHelper
 @inject IItemViewModel ViewModel
 
-<div class="item">
-    <div style="display: flex;">
-        <div class="type-image"></div>
-        <div style="display: flex;flex-grow:1; flex-direction: column;padding-left:20px">
-            <div class="detail">
-                <div>
-                    <h1 class="title">
-                        @(ViewModel.ItemDetail?.Item?.Name ?? "")
-                    </h1>
-                    <div class="minor-detail">
-                        <div>
-                            Size: @((ViewModel?.ItemDetail?.Item?.Space ?? 0) == 0 ? 1 : ViewModel?.ItemDetail?.Item?.Space)
-                        </div>
-                        <div>
-                            Weight: @(ViewModel?.ItemDetail?.Item?.Weight ?? 0)
-                        </div>
-                        @if ((ViewModel?.ItemDetail?.Item?.ScrapValue ?? -1) != -1)
-                        {
+    <div class="item">
+        <div style="display: flex;">
+            <div class="type-image"></div>
+            <div style="display: flex;flex-grow:1; flex-direction: column;padding-left:20px">
+                <div class="detail">
+                    <div>
+                        <h1 class="title">
+                            @(ViewModel.ItemDetail?.Item?.Name ?? "")
+                        </h1>
+                        <div class="minor-detail">
                             <div>
-                                Scrap Value: @(ViewModel?.ItemDetail?.Item?.ScrapValue.ToString("N0"))
+                                Size: @((ViewModel?.ItemDetail?.Item?.Space ?? 0) == 0 ? 1 : ViewModel?.ItemDetail?.Item?.Space)
                             </div>
-                        }
+                            <div>
+                                Weight: @(ViewModel?.ItemDetail?.Item?.Weight ?? 0)
+                            </div>
+                            @if ((ViewModel?.ItemDetail?.Item?.ScrapValue ?? -1) != -1)
+                            {
+                                <div>
+                                    Scrap Value: @(ViewModel?.ItemDetail?.Item?.ScrapValue.ToString("N0"))
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab-item">Market</div>
+                    <div class="tab-item">
+                        <input type="checkbox" bind="@ViewModel.ShowAlerts" /> Alerts
+                    </div>
+                    <div class="tab-item">
+                        <input type="checkbox" bind="@ViewModel.ShowStats" /> Show Stats
                     </div>
                 </div>
             </div>
-            <div class="tab-bar">
-                <div class="tab-item">Market</div>
-                <div class="tab-item">Alerts</div>
-                <div class="tab-item">
-                    <input type="checkbox" bind="@ViewModel.ShowStats" /> Show Stats
-                </div>
+        </div>
+
+        @if (ViewModel.ShowAlerts && ViewModel.Alerts != null)
+        {
+            <div>
+                @foreach (var entry in ViewModel.Alerts)
+                {
+                    <div>@entry.Name</div>
+                }
+            </div>
+        }
+
+        @if (ViewModel.ShowStats && ViewModel.ItemDetail?.Item != null)
+        {
+            <div>
+                @foreach (var entry in ViewModel.ItemDetail.Item.Description.Split("\n"))
+                {
+                    <div class="@(entry.StartsWith(" ") ? "indented" : "")">@entry</div>
+                }
+            </div>
+        }
+
+        <div style="display: grid; grid-auto-columns: 1fr 15px 1fr">
+            <div style="grid-column:1">
+                <h1>Cheapest Sale Prices</h1>
+                <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Selling" />
+            </div>
+            <div style="grid-column:3">
+                <h1>Highest Purchase Prices</h1>
+                <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Purchase" />
             </div>
         </div>
     </div>
-
-    @if (ViewModel.ShowStats && ViewModel.ItemDetail?.Item != null)
-    {
-        <div>
-            @foreach (var entry in ViewModel.ItemDetail.Item.Description.Split("\n"))
-            {
-                <div class="@(entry.StartsWith(" ") ? "indented" : "")">@entry</div>
-            }
-        </div>
-    }
-
-    <div style="display: grid; grid-auto-columns: 1fr 15px 1fr">
-        <div style="grid-column:1">
-            <h1>Cheapest Sale Prices</h1>
-            <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Selling" />
-        </div>
-        <div style="grid-column:3">
-            <h1>Highest Purchase Prices</h1>
-            <LatestHistory Item="@this.ViewModel.ItemDetail" Type="@OrderType.Purchase" />
-        </div>
-    </div>
-</div>
 
 @functions {
     private int Id { get; set; }
@@ -76,7 +88,6 @@
         subscriptions = new CompositeDisposable();
         UriHelper.OnLocationChanged += OnLocationChanges;
         subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ => Invoke(StateHasChanged)));
-        subscriptions.Add(this.ViewModel.WhenShowStatsChanged.Subscribe(_ => Invoke(StateHasChanged)));
     }
 
     private void OnLocationChanges(object sender, string location) => RefreshType();

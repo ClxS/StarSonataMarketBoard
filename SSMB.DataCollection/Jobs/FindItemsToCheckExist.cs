@@ -27,6 +27,7 @@
         [Queue("gather_checkable")]
         public async Task DoFindItemsToCheckExist()
         {
+            return;
             Console.WriteLine("Starting Job: FindItemsToCheckExist");
 
             using var dbContext = this.dbContextFactory();

@@ -1,4 +1,4 @@
-﻿namespace SSMB.Application.Items.Queries.GetRecentItems
+﻿namespace SSMB.Application.Items.Queries.GetFullItemDetails
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Domain;
-    using GetFullItemDetails;
-    using GetHotItems;
     using Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;

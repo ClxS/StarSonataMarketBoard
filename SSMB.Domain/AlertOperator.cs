@@ -1,18 +1,18 @@
-﻿namespace SSMB.Blazor.Pages.CreateAlert.Models
+﻿namespace SSMB.Domain
 {
     using System.ComponentModel;
 
-    public enum AlertOperator
+    public enum AlertOperator : byte
     {
         [Description("<")]
-        Below,
+        Below = 0,
         [Description("<=")]
-        BelowEqual,
+        BelowEqual = 1,
         [Description("=")]
-        Equal,
+        Equal = 2,
         [Description(">=")]
-        AboveEqual,
+        AboveEqual = 3,
         [Description(">")]
-        Above,
+        Above = 4,
     }
 }

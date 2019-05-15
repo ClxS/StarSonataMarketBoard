@@ -2,14 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
+    using System.Security.Claims;
     using Application.Items.Models;
-    using Models;
+    using Domain;
+    using Microsoft.AspNetCore.Http;
     using ViewServices;
 
     class CreateAlertViewModel : ICreateAlertViewModel
     {
+        private readonly IAlertsService alertsService;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly Subject<FullDetailItem> itemDetailsSubject;
 
         private readonly IItemsService itemsService;
@@ -20,11 +25,16 @@
 
         private int? itemId;
 
-        public CreateAlertViewModel(IItemsService itemsService)
+        public CreateAlertViewModel(IItemsService itemsService, IAlertsService alertsService,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.itemsService = itemsService;
+            this.alertsService = alertsService;
+            this.httpContextAccessor = httpContextAccessor;
             this.itemDetailsSubject = new Subject<FullDetailItem>();
         }
+
+        public string AlertName { get; set; }
 
         public IList<AlertCondition> Conditions => this.conditions;
 
@@ -53,13 +63,27 @@
 
         public IObservable<FullDetailItem> WhenItemDetailsUpdated => this.itemDetailsSubject.AsObservable();
 
+        public void AddAlertClicked()
+        {
+            if (!this.ItemId.HasValue)
+            {
+                return;
+            }
+
+            var identity = this.httpContextAccessor?.HttpContext?.User?.Identity as ClaimsIdentity;
+            if (identity?.IsAuthenticated ?? false)
+            {
+                var id = identity.Claims.FirstOrDefault(c => c.Type.EndsWith("nameidentifier"));
+                if (long.TryParse(id?.Value ?? "-", out var idValue))
+                {
+                    this.alertsService.CreateAlert(idValue, this.ItemId.Value, this.AlertName, this.Conditions);
+                }
+            }
+        }
+
         public void AddConditionClicked()
         {
             this.conditions.Add(new AlertCondition());
-        }
-
-        public void AddAlertClicked()
-        {
         }
 
         public void RemoveCondition(int conditionIndex)

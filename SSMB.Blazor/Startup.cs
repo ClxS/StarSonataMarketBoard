@@ -166,6 +166,7 @@ namespace SSMB.Blazor
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();
+            services.AddScoped<IAlertsService, AlertsServiceServerBased>();
         }
         
         private void RegisterHangfireTypes(IServiceCollection services)

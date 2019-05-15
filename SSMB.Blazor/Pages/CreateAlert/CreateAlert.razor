@@ -1,12 +1,14 @@
 ﻿@page "/CreateAlert"
 @using System.Reactive.Disposables
 @using Microsoft.AspNetCore.Components
-@using SSMB.Blazor.Pages.CreateAlert.Models
 @using SSMB.Blazor.Utility
+@using SSMB.Domain
 @inject IUriHelper UriHelper
 @inject ICreateAlertViewModel ViewModel
 
 <h1>Create Alert for @(ViewModel.ItemDetail?.Item?.Name ?? "")</h1>
+
+<input type="text" placeholder="Alert Name" bind="@ViewModel.AlertName" />
 <table class="create-alert">
     <thead>
         <tr>
@@ -24,7 +26,7 @@
                     <button onclick="@(() => { ViewModel.RemoveCondition(ViewModel.Conditions.IndexOf(condition)); })">X</button>
                 </td>
                 <td>
-                    <select bind="@condition.AlertField">
+                    <select bind="@condition.Field">
                         @foreach (var alertType in Enum.GetValues(typeof(AlertField)).Cast<AlertField>())
                         {
                             <option value="@alertType">@alertType.ToDescription()</option>
@@ -32,7 +34,7 @@
                     </select>
                 </td>
                 <td>
-                    <select bind="@condition.AlertOperator">
+                    <select bind="@condition.Operator">
                         @foreach (var alertOperator in Enum.GetValues(typeof(AlertOperator)).Cast<AlertOperator>())
                         {
                             <option value="@alertOperator">@alertOperator.ToDescription()</option>

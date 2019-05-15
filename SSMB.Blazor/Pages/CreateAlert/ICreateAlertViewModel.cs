@@ -3,13 +3,15 @@
     using System;
     using System.Collections.Generic;
     using Application.Items.Models;
-    using Models;
+    using Domain;
 
     public interface ICreateAlertViewModel
     {
         FullDetailItem ItemDetail { get; set; }
 
         int? ItemId { get; set; }
+
+        string AlertName { get; set; }
 
         IObservable<FullDetailItem> WhenItemDetailsUpdated { get; }
 

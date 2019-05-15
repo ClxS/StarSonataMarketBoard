@@ -10,6 +10,8 @@
     {
         DbSet<Item> Items { get; set; }
 
+        DbSet<Alert> Alerts { get; set; }
+
         DbSet<LtsOrderEntry> LtsOrder { get; set; }
 
         DbSet<OrderBatch> OrderBatch { get; set; }

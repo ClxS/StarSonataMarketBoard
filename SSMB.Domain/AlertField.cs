@@ -1,19 +1,19 @@
-﻿namespace SSMB.Blazor.Pages.CreateAlert.Models
+﻿namespace SSMB.Domain
 {
     using System.ComponentModel;
 
-    public enum AlertField
+    public enum AlertField : byte
     {
         [Description("Buy Quantity")]
-        BuyQuantity,
+        BuyQuantity = 0,
 
         [Description("Sell Quantity")]
-        SellQuantity,
+        SellQuantity = 1,
 
         [Description("Buy Price")]
-        BuyPrice,
+        BuyPrice = 2,
 
         [Description("Sell Price")]
-        SellPrice
+        SellPrice = 3
     }
 }

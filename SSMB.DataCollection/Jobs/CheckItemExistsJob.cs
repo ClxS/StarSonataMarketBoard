@@ -24,6 +24,7 @@
         public async Task CheckItemExists(string name, ItemType type, long cost, long weight, long space,
             Quality quality, string structuredDescription)
         {
+            return;
             Console.WriteLine("Starting Job: CheckItemExists");
 
             var result = await this.marketCheckService.RequestMarketCheckWithDescription(name);

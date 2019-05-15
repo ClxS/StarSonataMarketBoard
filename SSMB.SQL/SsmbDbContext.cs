@@ -14,6 +14,10 @@
 
         public DbSet<Item> Items { get; set; }
 
+        public DbSet<Alert> Alerts { get; set; }
+
+        public DbSet<AlertCondition> AlertConditions { get; set; }
+
         public DbSet<LtsOrderEntry> LtsOrder { get; set; }
 
         public DbSet<OrderBatch> OrderBatch { get; set; }
