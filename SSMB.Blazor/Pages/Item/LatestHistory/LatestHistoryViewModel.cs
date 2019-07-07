@@ -45,8 +45,8 @@
             }
 
             return this.OrderType == OrderType.Purchase
-                ? this.ItemDetails.LatestOrder.PurchaseEntries
-                : this.ItemDetails.LatestOrder.SaleEntries;
+                ? this.ItemDetails.LatestOrder.PurchaseEntries.OrderByDescending(c => c.Price)
+                : this.ItemDetails.LatestOrder.SaleEntries.OrderBy(c => c.Price);
         }
     }
 }

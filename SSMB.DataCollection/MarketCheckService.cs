@@ -155,13 +155,13 @@
                         break;
                     }
 
-                    if (Regex.IsMatch(msg.Message.Message, $"{request.ItemName} was not found.*"))
+                    if (Regex.IsMatch(msg.Message.Message, $"{request.ItemName.Replace("+", "\\+")} was not found.*"))
                     {
                         foundState = MarketDataState.NotOnMarket;
                         break;
                     }
 
-                    if (Regex.IsMatch(msg.Message.Message, $"{request.ItemName}(.|\\n)*Average selling price(.|\\n)*"))
+                    if (Regex.IsMatch(msg.Message.Message, $"{request.ItemName.Replace("+", "\\+")}(.|\\n)*Average selling price(.|\\n)*"))
                     {
                         foundState = MarketDataState.Available;
                         break;
@@ -195,7 +195,7 @@
                         : new OrderEntry[0]));
                 request.UpdateSubject.OnCompleted();
 
-                await Task.Delay(this.Throttle).ConfigureAwait(true);
+                //await Task.Delay(this.Throttle).ConfigureAwait(true);
             }
         }
 

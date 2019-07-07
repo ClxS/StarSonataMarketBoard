@@ -26,11 +26,14 @@ namespace SSMB.Blazor
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json.Linq;
+    using Pages.Appraise;
     using Pages.CreateAlert;
     using Pages.Index.HottestItems;
+    using Pages.Index.ProfitableItems;
     using Pages.Index.RecentItems;
     using Pages.Item;
     using Pages.Item.LatestHistory;
+    using Pages.UnderCut;
     using Server.API.V1;
     using Services;
     using Shared;
@@ -162,7 +165,10 @@ namespace SSMB.Blazor
             services.AddTransient<IItemViewModel, ItemViewModel>();
             services.AddTransient<ILatestHistoryViewModel, LatestHistoryViewModel>();
             services.AddTransient<IAccountPanelViewModel, AccountPanelViewModel>();
-            services.AddTransient<ICreateAlertViewModel, CreateAlertViewModel>(); 
+            services.AddTransient<ICreateAlertViewModel, CreateAlertViewModel>();
+            services.AddTransient<IProfitableItemsViewModel, ProfitableItemsViewModel>();
+            services.AddTransient<IAppraiseViewModel, AppraiseViewModel>();
+            services.AddTransient<IUnderCutViewModel, UnderCutViewModel>(); 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<INavigationService, NavigationService>();
             services.AddScoped<IItemsService, ItemsServiceServerBased>();

@@ -3,9 +3,11 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Application.Items.Models;
+    using Application.Items.Queries.GetBulkAppraisal;
     using Application.Items.Queries.GetFullItemDetails;
     using Application.Items.Queries.GetHotItems;
     using Application.Items.Queries.GetItems;
+    using Application.Items.Queries.GetProfitableItems;
     using Application.Items.Queries.GetRecentItems;
     using Domain;
     using MediatR;
@@ -42,6 +44,30 @@
         public async Task<IEnumerable<Item>> Hot()
         {
             return await this.mediator.Send(new GetHotItemsQuery());
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<ItemProfit>> Profitable()
+        {
+            return await this.mediator.Send(new GetProfitableItemsQuery());
+        }
+
+        [HttpGet]
+        public async Task<ItemAppraisal[]> Appraise((string Name, int Count)[] items)
+        {
+            return await this.mediator.Send(new GetBulkAppraisalQuery()
+            {
+                Items = items
+            });
+        }
+
+        [HttpGet]
+        public async Task<ItemRecommendedPrice[]> UnderCut(string[] items)
+        {
+            return await this.mediator.Send(new GetBulkUnderCutQuery()
+            {
+                Items = items
+            });
         }
     }
 }

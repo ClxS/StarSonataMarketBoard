@@ -1,0 +1,74 @@
+﻿@page "/Appraise"
+@using SSMB.Application.Items.Models
+@inject IAppraiseViewModel ViewModel
+
+<div>
+    <div>
+        <textarea rows="4" style="width:100%" bind="@ViewModel.AppraiseText"></textarea>
+    </div>
+    <div>
+        <button onclick="@ViewModel.OnAppraiseClick">Appraise</button>
+    </div>
+</div>
+
+@if (ViewModel.Appraisals != null && ViewModel.Appraisals.Any())
+{
+    <h1>Appraisal Results</h1>
+    <h6>Total Profit: @ViewModel.Appraisals.Sum(a => a.TotalProfit).ToString("N0")</h6>
+    <table class="recent-items">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Date Updated</th>
+                <th>Total Profit</th>
+                <th>Trades</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewModel.Appraisals)
+            {
+                <tr>
+                    <td class="results-item-rarity">
+                        <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                    </td>
+                    <td>
+                        @item.Item.Name
+                        <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                    </td>
+                    <td>
+                        @item.DateUpdated
+                        <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                    </td>
+                    <td>
+                        @item.TotalProfit.ToString("N0")
+                        <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                    </td>
+                    <td>
+                    @if (item.Sales != null)
+                    {
+                        @foreach (var sale in item.Sales)
+                         {
+                             @if (sale.Type == ItemAppraisal.SellType.Scrap)
+                              {
+                                  <div>@sale.Count.ToString("N0") to @sale.Type</div>
+                              }
+                              else
+                              {
+                                  <div>@sale.Count.ToString("N0") to @sale.To</div>
+                              }
+                         }
+                    }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    protected override void OnInit()
+    {
+        this.ViewModel.WhenAppraisalCompleted.Subscribe(_ => Invoke(StateHasChanged));
+    }
+}

@@ -26,15 +26,14 @@
             Console.WriteLine("Preparing Hangfire");
             Console.ForegroundColor = ConsoleColor.White;
 
-            var rand = new Random();
             using (var dbContext = this.dbContextFactory())
             {
                 // If it's a known context type, lets take a shortcut and clear the table directly.
-                if (dbContext is SsmbDbContext concreteContext)
+                /*if (dbContext is SsmbDbContext concreteContext)
                 {
                     concreteContext.Database.ExecuteSqlCommand("DELETE FROM HangFire.Job");
                     concreteContext.Database.ExecuteSqlCommand("DELETE FROM HangFire.JobQueue");
-                }
+                }*/
 
                 foreach (var name in dbContext.Items.Select(i => i.Name))
                 {
@@ -43,15 +42,14 @@
                 }
             }
 
-            this.EraseQueue("default");
+            /*this.EraseQueue("default");
             this.EraseQueue("check_available");
             this.EraseQueue("gather_checkable");
-            this.EraseQueue("update_mc");
+            this.EraseQueue("update_mc");*/
 
-            RecurringJob.RemoveIfExists("FindItemsToCheckExist");
-            RecurringJob.AddOrUpdate<FindItemsToCheckExist>("FindItemsToCheckExist",
-                (job) => job.DoFindItemsToCheckExist(), Cron.Weekly, null, "gather_checkable");
-            RecurringJob.Trigger("FindItemsToCheckExist");
+            //RecurringJob.RemoveIfExists("FindItemsToCheckExist");
+            RecurringJob.AddOrUpdate<FindItemsToCheckExist>("FindItemsToCheckExist", (job) => job.DoFindItemsToCheckExist(), Cron.Monthly, null, "gather_checkable");
+            //RecurringJob.Trigger("FindItemsToCheckExist");
         }
 
         private void EraseQueue(string queueName)

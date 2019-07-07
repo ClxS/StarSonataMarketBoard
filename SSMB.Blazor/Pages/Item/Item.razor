@@ -89,10 +89,7 @@
         UriHelper.OnLocationChanged += OnLocationChanges;
         subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ =>
         {
-            if (ViewModel.ShowStats)
-            {
-                Invoke(StateHasChanged);
-            }
+            Invoke(StateHasChanged);
         }));
         subscriptions.Add(this.ViewModel.WhenAlertsUpdated.Subscribe(_ =>
         {

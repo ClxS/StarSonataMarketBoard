@@ -1,0 +1,25 @@
+﻿@page "/UnderCut"
+@using SSMB.Application.Items.Models
+@inject IUnderCutViewModel ViewModel
+
+    <div>
+        <div>
+            <textarea rows="4" style="width:100%" bind="@ViewModel.UnderCutText"></textarea>
+        </div>
+        <div>
+            <button onclick="@ViewModel.OnUnderCutClick">Under Cut</button>
+        </div>
+        <div style="margin-top:20px">
+            <textarea rows="4" style="width:100%" bind="@ViewModel.SaleText"></textarea>
+        </div>
+        <div style="margin-top:20px">
+            <textarea rows="4" style="width:100%" bind="@ViewModel.IgnoredText"></textarea>
+        </div>
+    </div>
+
+@functions {
+    protected override void OnInit()
+    {
+        this.ViewModel.WhenUnderCutCompleted.Subscribe(_ => Invoke(StateHasChanged));
+    }
+}

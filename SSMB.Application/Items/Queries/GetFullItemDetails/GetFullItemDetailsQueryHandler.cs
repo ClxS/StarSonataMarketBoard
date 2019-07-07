@@ -57,7 +57,8 @@
             {
                 Item = item,
                 LatestOrder = lastOrder,
-                PurchasePrices = purchasePrices
+                PurchasePrices = purchasePrices.OrderBy(p => p.price).ToList(),
+                SalePrices = salePrices.OrderByDescending(p => p.price).ToList()
             };
         }
 

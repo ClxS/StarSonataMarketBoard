@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using SSMB.Blazor.Pages.Index.HottestItems
 @using SSMB.Blazor.Pages.Index.RecentItems
+@using SSMB.Blazor.Pages.Index.ProfitableItems
 
 <div style="display: grid; grid-auto-columns: 3fr 15px 1fr">
     <div style="grid-column:1">
@@ -8,5 +9,8 @@
     </div>
     <div style="grid-column:3">
         <HottestItems />
+    </div>
+    <div>
+        <ProfitableItems />
     </div>
 </div>

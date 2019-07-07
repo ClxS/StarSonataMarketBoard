@@ -13,5 +13,11 @@
         Task<Item[]> GetHotItems(int count);
 
         Task<FullDetailItem> GetItemDetails(int id);
+
+        Task<ItemProfit[]> GetProfitableItems();
+
+        Task<ItemAppraisal[]> GetAppraisal((string Name, int Count)[] itemNames);
+
+        Task<ItemRecommendedPrice[]> GetUnderCut(string[] itemNames);
     }
 }

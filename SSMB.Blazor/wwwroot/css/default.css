@@ -25,6 +25,14 @@ header {
     padding-bottom: 20px;
 }
 
+textarea {
+    background-color: #343d4b;
+    color: #eaeaea;
+    border: 1px solid #050505;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px #000;
+}
+
 table {
     background-color: var(--table-background);
     border: none;
@@ -42,6 +50,7 @@ td {
     border: none;
     border-right: 1px solid var(--table-header-background);
     border-bottom: 1px solid var(--table-header-background);
+    position: relative;
 }
 
 th {
@@ -52,6 +61,14 @@ th {
     text-transform: uppercase;
     text-align: left;
     padding-left: 12px;
+}
+
+.clickable-cell {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .flex-spacer {

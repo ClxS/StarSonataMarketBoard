@@ -1,5 +1,6 @@
 ﻿namespace SSMB.Blazor.ViewServices
 {
+    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
     using Application.Items.Models;
@@ -41,6 +42,23 @@
             var items = await this.httpClientFactory.CreateClient()
                                   .GetJsonAsync<FullDetailItem>($"https://localhost:44327/api/v1/items/detail?id={id}");
             return items;
+        }
+
+        public async Task<ItemProfit[]> GetProfitableItems()
+        {
+            var items = await this.httpClientFactory.CreateClient()
+                                  .GetJsonAsync<ItemProfit[]>("https://localhost:44327/api/v1/items/profitable");
+            return items;
+        }
+
+        public Task<ItemAppraisal[]> GetAppraisal((string Name, int Count)[] itemNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ItemRecommendedPrice[]> GetUnderCut(string[] itemNames)
+        {
+            throw new NotImplementedException();
         }
     }
 }

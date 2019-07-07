@@ -30,6 +30,21 @@
             return Task.Run(async () => (await this.itemsController.Hot()).ToArray());
         }
 
+        public Task<ItemProfit[]> GetProfitableItems()
+        {
+            return Task.Run(async () => (await this.itemsController.Profitable()).ToArray());
+        }
+
+        public Task<ItemAppraisal[]> GetAppraisal((string Name, int Count)[] itemNames)
+        {
+            return Task.Run(async () => (await this.itemsController.Appraise(itemNames)).ToArray());
+        }
+
+        public Task<ItemRecommendedPrice[]> GetUnderCut(string[] itemNames)
+        {
+            return Task.Run(async () => (await this.itemsController.UnderCut(itemNames)).ToArray());
+        }
+
         public Task<FullDetailItem> GetItemDetails(int id)
         {
             return Task.Run(async () => (await this.itemsController.Detail(id)));

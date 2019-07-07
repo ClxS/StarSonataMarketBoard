@@ -1,0 +1,65 @@
+﻿@inject IProfitableItemsViewModel ViewModel
+    <h1>Recent Items</h1>
+    <table class="recent-items">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Date Updated</th>
+                <th>Price Difference</th>
+                <th>Purchase Station</th>
+                <th>Sale Station</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewModel.Results != null)
+            {
+                foreach (var item in ViewModel.Results)
+                {
+                    <tr>
+                        <td class="results-item-rarity">
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            @item.Item.Name
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            @item.LastChecked.ToString("dd MMMM hh:mm tt")
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            <div>@item.FullPotentialProfit.ToString("N0")</div>
+                            <div>@item.PriceDifferential.ToString("N0")</div>
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            @(item.PurchaseStation)
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            @item.SellStation
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                        <td>
+                            @item.Item.Type
+                            <a href="/Item?id=@item.Item.ItemId" class="clickable-cell"></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+@functions {
+
+    protected override Task OnInitAsync()
+    {
+        ViewModel.WhenResultsChanged
+                 .Subscribe(_ => { Invoke(StateHasChanged); });
+
+        return Task.CompletedTask;
+    }
+
+}
