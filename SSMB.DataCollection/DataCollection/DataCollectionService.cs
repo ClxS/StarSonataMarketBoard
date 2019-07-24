@@ -28,13 +28,6 @@
 
             using (var dbContext = this.dbContextFactory())
             {
-                // If it's a known context type, lets take a shortcut and clear the table directly.
-                /*if (dbContext is SsmbDbContext concreteContext)
-                {
-                    concreteContext.Database.ExecuteSqlCommand("DELETE FROM HangFire.Job");
-                    concreteContext.Database.ExecuteSqlCommand("DELETE FROM HangFire.JobQueue");
-                }*/
-
                 foreach (var name in dbContext.Items.Select(i => i.Name))
                 {
                     RecurringJob.AddOrUpdate<ItemMarketCheck>(ItemMarketCheck.GetJobName(name),
@@ -42,14 +35,7 @@
                 }
             }
 
-            /*this.EraseQueue("default");
-            this.EraseQueue("check_available");
-            this.EraseQueue("gather_checkable");
-            this.EraseQueue("update_mc");*/
-
-            //RecurringJob.RemoveIfExists("FindItemsToCheckExist");
             RecurringJob.AddOrUpdate<FindItemsToCheckExist>("FindItemsToCheckExist", (job) => job.DoFindItemsToCheckExist(), Cron.Monthly, null, "gather_checkable");
-            //RecurringJob.Trigger("FindItemsToCheckExist");
         }
 
         private void EraseQueue(string queueName)
