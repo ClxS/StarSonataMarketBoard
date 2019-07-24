@@ -30,17 +30,17 @@
         private readonly ConcurrentQueue<MarketRequest> pendingRequests;
         private bool shouldExitMcTask;
 
-        public MarketCheckService(StarSonataApi api)
+        public MarketCheckService(StarSonataApi api, ILoginCredentials credentials)
         {
             this.api = api;
             this.pendingRequests = new ConcurrentQueue<MarketRequest>();
             this.incomingMessages = new ConcurrentQueue<TextMessage>();
             this.shouldExitMcTask = false;
-            this.api.WhenConnected.Subscribe(_ => { this.TryGameLoginAsync(); });
+            this.api.WhenConnected.Subscribe(_ => { this.TryGameLoginAsync(credentials.Username, credentials.Password); });
             this.api.WhenDisconnected.Subscribe(_ => { this.api.Connect(); });
             this.api.WhenMessageReceived.Where(msg => msg is Disconnect).Subscribe(msg =>
             {
-                this.TryGameLoginAsync();
+                this.TryGameLoginAsync(credentials.Username, credentials.Password);
             });
             this.api.WhenMessageReceived.Where(msg => msg is TextMessage).Subscribe(msg =>
             {
@@ -51,8 +51,8 @@
             Task.Run(this.AnalyseRequests);
         }
 
-        public MarketCheckService(StarSonataApi api, CancellationToken token)
-            : this(api)
+        public MarketCheckService(StarSonataApi api, ILoginCredentials credentials, CancellationToken token)
+            : this(api, credentials)
         {
             token.Register(() => { this.shouldExitMcTask = true; });
         }
@@ -206,7 +206,7 @@
             }
         }
 
-        private Task TryGameLoginAsync()
+        private Task TryGameLoginAsync(string username, string password)
         {
             return Task.Run(
                 async () =>
@@ -222,7 +222,7 @@
 
                         try
                         {
-                            this.api.TryLoginAsync("marketchecker", "123456654321carl").Wait();
+                            this.api.TryLoginAsync(username, password).Wait();
                             this.AppState = EAppState.Ready;
                             break;
                         }

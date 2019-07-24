@@ -9,6 +9,7 @@ namespace SSMB.Blazor
     using Application.Infrastructure;
     using Application.Interfaces;
     using Application.Items.Queries.GetRecentItems;
+    using DataCollection;
     using Filters;
     using Hangfire;
     using Hangfire.SqlServer;
@@ -153,10 +154,28 @@ namespace SSMB.Blazor
                                 }
                             };
                         });
-            RegisterBlazorTypes(services);
+            services.AddSingleton<ILoginCredentials>(_ =>
+            {
+                var credentialsSection = this.Configuration.GetSection("Credentials");
+                if (credentialsSection == null)
+                {
+                    throw new Exception("Credentials section is missing from appsettings.json");
+                }
+
+                var username = credentialsSection["Username"];
+                var password = credentialsSection["Password"];
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                {
+                    throw new Exception("Credentials section is missing a username or password");
+                }
+
+                return new ConfigCredentials(username, password);
+            });
+
+            this.RegisterBlazorTypes(services);
         }
 
-        private static void RegisterBlazorTypes(IServiceCollection services)
+        private void RegisterBlazorTypes(IServiceCollection services)
         {
             services.AddTransient<IScrapShopViewModel, ScrapShopViewModel>();
             services.AddTransient<IItemSearchViewModel, ItemsSearchViewModel>();
@@ -188,6 +207,19 @@ namespace SSMB.Blazor
         {
             services.AddMediatR(typeof(GetRecentItemsQuery).GetTypeInfo().Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+        }
+
+        private class ConfigCredentials : ILoginCredentials
+        {
+            public ConfigCredentials(string username, string password)
+            {
+                this.Username = username;
+                this.Password = password;
+            }
+
+            public string Username { get; }
+
+            public string Password { get; }
         }
     }
 }
