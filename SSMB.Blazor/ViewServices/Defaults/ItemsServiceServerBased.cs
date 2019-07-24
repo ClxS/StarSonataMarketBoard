@@ -45,6 +45,11 @@
             return Task.Run(async () => (await this.itemsController.UnderCut(itemNames)).ToArray());
         }
 
+        public Task<Scrapable[]> GetScrapList()
+        {
+            return Task.Run(async () => (await this.itemsController.Scrapable(0.75)));
+        }
+
         public Task<FullDetailItem> GetItemDetails(int id)
         {
             return Task.Run(async () => (await this.itemsController.Detail(id)));

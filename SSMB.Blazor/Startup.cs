@@ -33,6 +33,7 @@ namespace SSMB.Blazor
     using Pages.Index.RecentItems;
     using Pages.Item;
     using Pages.Item.LatestHistory;
+    using Pages.ScrapShop;
     using Pages.UnderCut;
     using Server.API.V1;
     using Services;
@@ -157,6 +158,7 @@ namespace SSMB.Blazor
 
         private static void RegisterBlazorTypes(IServiceCollection services)
         {
+            services.AddTransient<IScrapShopViewModel, ScrapShopViewModel>();
             services.AddTransient<IItemSearchViewModel, ItemsSearchViewModel>();
             services.AddTransient<IItemsResultsViewModel, ItemsResultsViewModel>();
             services.AddTransient<IMainLayoutViewModel, MainLayoutViewModel>();

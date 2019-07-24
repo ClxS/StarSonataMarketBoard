@@ -60,5 +60,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public Task<Scrapable[]> GetScrapList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

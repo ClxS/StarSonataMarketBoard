@@ -1,0 +1,16 @@
+﻿@page "/Scrapable"
+@using SSMB.Application.Items.Models
+@inject IScrapShopViewModel ViewModel
+
+<div>
+    <div style="margin-top:20px">
+        <textarea rows="50" style="width:100%" bind="@ViewModel.BaseText"></textarea>
+    </div>
+</div>
+
+@functions {
+    protected override void OnInit()
+    {
+        this.ViewModel.WhenScrapShopComplete.Subscribe(_ => Invoke(StateHasChanged));
+    }
+}

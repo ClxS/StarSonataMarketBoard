@@ -69,5 +69,14 @@
                 Items = items
             });
         }
+
+        [HttpGet]
+        public async Task<Scrapable[]> Scrapable(double factor)
+        {
+            return await this.mediator.Send(new GetScrapableQuery()
+            {
+                Factor = factor
+            });
+        }
     }
 }
