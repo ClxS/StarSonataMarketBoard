@@ -68,7 +68,7 @@
             Ready,
         }
 
-        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(0.8);
+        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(4);
 
         private EAppState AppState { get; set; } = EAppState.WaitingForLogin;
 
@@ -194,8 +194,7 @@
                         ? MarketDataStringExtractUtility.OrderDataFromMarketCheckString(msg.Message.Message)
                         : new OrderEntry[0]));
                 request.UpdateSubject.OnCompleted();
-
-                //await Task.Delay(this.Throttle).ConfigureAwait(true);
+                await Task.Delay(this.Throttle).ConfigureAwait(true);
             }
         }
 
