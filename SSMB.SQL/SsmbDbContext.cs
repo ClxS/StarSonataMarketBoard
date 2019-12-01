@@ -1,15 +1,32 @@
 ﻿namespace SSMB.SQL
 {
+    using System;
     using Application.Interfaces;
     using Domain;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Diagnostics;
 
-    public class SsmbDbContext : DbContext, ISsmbDbContext
+    public sealed class SsmbDbContext : DbContext, ISsmbDbContext
     {
+        private static bool created = false;
+
         public SsmbDbContext(DbContextOptions options)
             : base(options)
         {
+            if (!created)
+            {
+                created = true;
+                this.Database.EnsureCreated();
+
+                try
+                {
+                    this.Database.Migrate();
+                }
+                catch
+                {
+                    Console.WriteLine("Encountered error trying to migrate");
+                }
+            }
         }
 
         public DbSet<Item> Items { get; set; }

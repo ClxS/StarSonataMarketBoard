@@ -12,7 +12,7 @@ namespace SSMB.Blazor
     using DataCollection;
     using Filters;
     using Hangfire;
-    using Hangfire.SqlServer;
+    using Hangfire.SQLite;
     using MediatR;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
@@ -20,6 +20,7 @@ namespace SSMB.Blazor
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Data.Sqlite;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Migrations;
     using Microsoft.Extensions.Configuration;
@@ -50,9 +51,13 @@ namespace SSMB.Blazor
     {
         private const string DbConnectionKey = "SSMBDatabase";
 
+        private readonly SqliteConnection sqlliteConnection;
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
+            this.sqlliteConnection = new SqliteConnection(this.Configuration.GetConnectionString(DbConnectionKey));
+            this.sqlliteConnection.Open(); // TODO[CJ] Bad!
         }
 
         public IConfiguration Configuration { get; }
@@ -106,7 +111,7 @@ namespace SSMB.Blazor
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
             services.AddDbContext<ISsmbDbContext, SsmbDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString(DbConnectionKey)));
+                options.UseSqlite(this.Configuration.GetConnectionString(DbConnectionKey)));
             this.RegisterHangfireTypes(services);
             this.RegisterMediatRType(services);
             services.AddHttpClient();
@@ -195,12 +200,19 @@ namespace SSMB.Blazor
             services.AddScoped<IItemsService, ItemsServiceServerBased>();
             services.AddScoped<IAlertsService, AlertsServiceServerBased>();
         }
-        
+
+        private bool IsConnectionString(string nameOrConnectionString)
+        {
+            return nameOrConnectionString.ToLower().Contains("data source");
+        }
+
         private void RegisterHangfireTypes(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(this.Configuration.GetConnectionString(DbConnectionKey)));
-            JobStorage.Current = new SqlServerStorage(this.Configuration.GetConnectionString(DbConnectionKey),
-                new SqlServerStorageOptions());
+            services.AddHangfire(x =>
+            {
+               
+            });
+            JobStorage.Current = new SQLiteStorage(this.sqlliteConnection, new SQLiteStorageOptions());
         }
 
         private void RegisterMediatRType(IServiceCollection services)

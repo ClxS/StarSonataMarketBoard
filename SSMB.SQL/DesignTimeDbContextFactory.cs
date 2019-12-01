@@ -23,7 +23,7 @@
             var connectionString = config.GetConnectionString("SSMBDatabase");
 
             Console.WriteLine($"ConnectionString: {connectionString}");
-            builder.UseSqlServer(connectionString);
+            builder.UseSqlite(@"Data Source=ssmb.sqlite");
             return new SsmbDbContext(builder.Options);
         }
     }

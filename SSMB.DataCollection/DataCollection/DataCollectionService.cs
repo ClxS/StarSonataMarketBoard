@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Timers;
     using Application.Interfaces;
     using Autofac;
     using Hangfire;
     using Jobs;
+    using Microsoft.Data.Sqlite;
     using Microsoft.EntityFrameworkCore;
     using SQL;
     using Utility;
@@ -26,6 +28,14 @@
             Console.WriteLine("Preparing Hangfire");
             Console.ForegroundColor = ConsoleColor.White;
 
+            var timer = new Timer(10000);
+            timer.AutoReset = false;
+            timer.Elapsed += this.TimerOnElapsed;
+            timer.Start();
+        }
+
+        private void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
             using (var dbContext = this.dbContextFactory())
             {
                 foreach (var name in dbContext.Items.Select(i => i.Name))
@@ -33,9 +43,9 @@
                     RecurringJob.AddOrUpdate<ItemMarketCheck>(ItemMarketCheck.GetJobName(name),
                         (job) => job.DoItemMarketCheck(name), CronUtility.GetRandom12HourCron(), null, "update_mc");
                 }
-            }
 
-            RecurringJob.AddOrUpdate<FindItemsToCheckExist>("FindItemsToCheckExist", (job) => job.DoFindItemsToCheckExist(), Cron.Monthly, null, "gather_checkable");
+                RecurringJob.AddOrUpdate<FindItemsToCheckExist>("FindItemsToCheckExist", (job) => job.DoFindItemsToCheckExist(), Cron.Monthly, null, "gather_checkable");
+            }
         }
 
         private void EraseQueue(string queueName)

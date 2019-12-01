@@ -39,3 +39,4 @@ packages/
 ![Pp]rebuilt
 
 SSMB\.Blazor/appsettings\.Secrets\.json
+ssmb.db
