@@ -27,7 +27,7 @@
             this.searchService.MarkSearchVisible();
         }
 
-        public void OnInput(UIChangeEventArgs args)
+        public void OnInput(ChangeEventArgs args)
         {
             this.SearchValue = (string)args.Value;
         }

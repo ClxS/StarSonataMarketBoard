@@ -7,7 +7,7 @@
         <textarea rows="4" style="width:100%" bind="@ViewModel.AppraiseText"></textarea>
     </div>
     <div>
-        <button onclick="@ViewModel.OnAppraiseClick">Appraise</button>
+        <button @onclick="@ViewModel.OnAppraiseClick">Appraise</button>
     </div>
 </div>
 
@@ -67,8 +67,8 @@
 }
 
 @functions {
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        this.ViewModel.WhenAppraisalCompleted.Subscribe(_ => Invoke(StateHasChanged));
+        this.ViewModel.WhenAppraisalCompleted.Subscribe(_ => InvokeAsync(StateHasChanged));
     }
 }

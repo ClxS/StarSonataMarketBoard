@@ -10,10 +10,10 @@
     class HottestItemsViewModel : IHottestItemsViewModel
     {
         private readonly Subject<Item[]> itemsSubject = new Subject<Item[]>();
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
         private Item[] items;
 
-        public HottestItemsViewModel(IItemsService itemsService, IUriHelper uriHelper)
+        public HottestItemsViewModel(IItemsService itemsService, NavigationManager uriHelper)
         {
             this.uriHelper = uriHelper;
             itemsService.GetHotItems(20).ContinueWith(items => { this.Items = items.Result; });

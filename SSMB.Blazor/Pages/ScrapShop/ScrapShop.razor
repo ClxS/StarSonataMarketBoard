@@ -9,8 +9,8 @@
 </div>
 
 @functions {
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        this.ViewModel.WhenScrapShopComplete.Subscribe(_ => Invoke(StateHasChanged));
+        this.ViewModel.WhenScrapShopComplete.Subscribe(_ => InvokeAsync(StateHasChanged));
     }
 }

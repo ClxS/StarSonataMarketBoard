@@ -16,7 +16,7 @@
     {
         private readonly IAlertsService alertsService;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
         private readonly Subject<FullDetailItem> itemDetailsSubject;
 
         private readonly IItemsService itemsService;
@@ -31,7 +31,7 @@
             IItemsService itemsService,
             IAlertsService alertsService,
             IHttpContextAccessor httpContextAccessor,
-            IUriHelper uriHelper)
+            NavigationManager uriHelper)
         {
             this.itemsService = itemsService;
             this.alertsService = alertsService;

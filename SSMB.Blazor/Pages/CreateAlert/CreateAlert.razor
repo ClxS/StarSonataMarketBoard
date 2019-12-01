@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Components
 @using SSMB.Blazor.Utility
 @using SSMB.Domain
-@inject IUriHelper UriHelper
+@inject NavigationManager UriHelper
 @inject ICreateAlertViewModel ViewModel
 
 <h1>Create Alert for @(ViewModel.ItemDetail?.Item?.Name ?? "")</h1>
@@ -23,7 +23,7 @@
         {
             <tr>
                 <td>
-                    <button onclick="@(() => { ViewModel.RemoveCondition(ViewModel.Conditions.IndexOf(condition)); })">X</button>
+                    <button @onclick="@(() => { ViewModel.RemoveCondition(ViewModel.Conditions.IndexOf(condition)); })">X</button>
                 </td>
                 <td>
                     <select bind="@condition.Field">
@@ -48,27 +48,27 @@
         }
     </tbody>
 </table>
-<button onclick="@ViewModel.AddConditionClicked">Add Condition</button>
-<button onclick="@ViewModel.AddAlertClicked">Add Alert</button>
+<button @onclick="@ViewModel.AddConditionClicked">Add Condition</button>
+<button @onclick="@ViewModel.AddAlertClicked">Add Alert</button>
 
 @functions {
     private int Id { get; set; }
 
     private CompositeDisposable subscriptions;
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         RefreshType();
         subscriptions = new CompositeDisposable();
-        UriHelper.OnLocationChanged += OnLocationChanges;
-        subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ => Invoke(StateHasChanged)));
+        UriHelper.LocationChanged += OnLocationChanges;
+        subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ => InvokeAsync(StateHasChanged)));
     }
 
-    private void OnLocationChanges(object sender, string location) => RefreshType();
+    private void OnLocationChanges(object sender, LocationChangedEventArgs locationChangedEventArgs) => RefreshType();
 
     private void RefreshType()
     {
-        var uri = new Uri(UriHelper.GetAbsoluteUri());
+        var uri = new Uri(UriHelper.Uri);
         var idStr = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var idParam) ? idParam.First() : "";
         if (!int.TryParse(idStr, out var id))
         {
@@ -82,7 +82,7 @@
 
     public void Dispose()
     {
-        UriHelper.OnLocationChanged -= OnLocationChanges;
+        UriHelper.LocationChanged -= OnLocationChanges;
         this.subscriptions.Dispose();
     }
 }

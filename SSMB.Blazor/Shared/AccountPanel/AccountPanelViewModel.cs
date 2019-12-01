@@ -6,9 +6,9 @@
     class AccountPanelViewModel : IAccountPanelViewModel
     {
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
 
-        public AccountPanelViewModel(IHttpContextAccessor httpContextAccessor, IUriHelper uriHelper)
+        public AccountPanelViewModel(IHttpContextAccessor httpContextAccessor, NavigationManager uriHelper)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.uriHelper = uriHelper;

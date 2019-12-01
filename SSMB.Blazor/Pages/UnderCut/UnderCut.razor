@@ -7,7 +7,7 @@
             <textarea rows="4" style="width:100%" bind="@ViewModel.UnderCutText"></textarea>
         </div>
         <div>
-            <button onclick="@ViewModel.OnUnderCutClick">Under Cut</button>
+            <button @onclick="@ViewModel.OnUnderCutClick">Under Cut</button>
         </div>
         <div style="margin-top:20px">
             <textarea rows="4" style="width:100%" bind="@ViewModel.SaleText"></textarea>
@@ -18,8 +18,8 @@
     </div>
 
 @functions {
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        this.ViewModel.WhenUnderCutCompleted.Subscribe(_ => Invoke(StateHasChanged));
+        this.ViewModel.WhenUnderCutCompleted.Subscribe(_ => InvokeAsync(StateHasChanged));
     }
 }

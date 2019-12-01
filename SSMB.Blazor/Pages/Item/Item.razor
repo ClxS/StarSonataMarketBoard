@@ -5,7 +5,7 @@
 @using SSMB.Blazor.Pages.Item.LatestHistory
 @using SSMB.Blazor.Shared.ItemsSearch
 @using SSMB.Domain
-@inject IUriHelper UriHelper
+@inject NavigationManager UriHelper
 @inject IItemViewModel ViewModel
 
     <div class="item">
@@ -82,29 +82,29 @@
 
     private CompositeDisposable subscriptions;
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
         RefreshType();
         subscriptions = new CompositeDisposable();
-        UriHelper.OnLocationChanged += OnLocationChanges;
+        UriHelper.LocationChanged += OnLocationChanges;
         subscriptions.Add(this.ViewModel.WhenItemDetailsUpdated.Subscribe(_ =>
         {
-            Invoke(StateHasChanged);
+            InvokeAsync(StateHasChanged);
         }));
         subscriptions.Add(this.ViewModel.WhenAlertsUpdated.Subscribe(_ =>
         {
             if (ViewModel.ShowAlerts)
             {
-                Invoke(StateHasChanged);
+                InvokeAsync(StateHasChanged);
             }
         }));
     }
 
-    private void OnLocationChanges(object sender, string location) => RefreshType();
+    private void OnLocationChanges(object sender, LocationChangedEventArgs locationChangedEventArgs) => RefreshType();
 
     private void RefreshType()
     {
-        var uri = new Uri(UriHelper.GetAbsoluteUri());
+        var uri = new Uri(UriHelper.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
         var idStr = query.TryGetValue("id", out var idParam) ? idParam.First() : "";
         if (!int.TryParse(idStr, out var id))
@@ -120,7 +120,7 @@
 
     public void Dispose()
     {
-        UriHelper.OnLocationChanged -= OnLocationChanges;
+        UriHelper.LocationChanged -= OnLocationChanges;
         this.subscriptions.Dispose();
     }
 }

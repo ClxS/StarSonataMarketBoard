@@ -54,10 +54,10 @@
 
 @functions {
 
-    protected override Task OnInitAsync()
+    protected override Task OnInitializedAsync()
     {
         ViewModel.WhenResultsChanged
-                 .Subscribe(_ => { Invoke(StateHasChanged); });
+                 .Subscribe(_ => { InvokeAsync(StateHasChanged); });
 
         return Task.CompletedTask;
     }

@@ -3,12 +3,12 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
-@inject IUriHelper UriHelper
+@inject NavigationManager UriHelper
 
 @functions {
     private bool shouldRedirect = false;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         if (!HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
@@ -20,7 +20,7 @@
         }
     }
 
-    protected override void OnAfterRender()
+    protected override void OnAfterRender(bool _)
     {
         if (shouldRedirect)
         {

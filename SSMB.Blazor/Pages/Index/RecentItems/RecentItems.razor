@@ -18,7 +18,7 @@
             {
                 foreach (var item in ViewModel.Results)
                 {
-                    <tr onclick="@(() => ViewModel.OnItemClicked(item.Item.ItemId))">
+                    <tr @onclick="@(() => ViewModel.OnItemClicked(item.Item.ItemId))">
                         <td class="results-item-rarity"></td>
                         <td>@item.Item.Name</td>
                         <td>@item.DateChecked.ToString("dd MMMM hh:mm tt")</td>
@@ -35,10 +35,10 @@
 
 @functions {
 
-    protected override Task OnInitAsync()
+    protected override Task OnInitializedAsync()
     {
         ViewModel.WhenResultsChanged
-                 .Subscribe(_ => { Invoke(StateHasChanged); });
+                 .Subscribe(_ => { InvokeAsync(StateHasChanged); });
 
         return Task.CompletedTask;
     }

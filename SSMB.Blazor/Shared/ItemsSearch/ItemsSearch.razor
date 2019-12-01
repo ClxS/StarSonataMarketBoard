@@ -4,8 +4,8 @@
 <div class="search-container">
     <input type="text" placeholder="Search"
            bind="@ViewModel.SearchValue"
-           oninput="@ViewModel.OnInput"
-           onfocusin="@ViewModel.OnInputFocus"
-           onclick="@ViewModel.OnClick"/>
+           @oninput="@ViewModel.OnInput"
+           @onfocusin="@ViewModel.OnInputFocus"
+           @onclick="@ViewModel.OnClick"/>
     <button>Filters</button>
 </div>

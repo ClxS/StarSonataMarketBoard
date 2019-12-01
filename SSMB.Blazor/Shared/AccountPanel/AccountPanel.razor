@@ -3,16 +3,16 @@
 @if (ViewModel.IsUserAuthenticated)
 {
     <div class="button-tray">
-        <button onclick="@this.OnLoginNameClicked">@ViewModel.UserName</button>
+        <button @onclick="@this.OnLoginNameClicked">@ViewModel.UserName</button>
         @if (this.IsButtonTrayExpanded)
         {
-            <button onclick="@ViewModel.OnAlertsClicked">Alerts</button>
+            <button @onclick="@ViewModel.OnAlertsClicked">Alerts</button>
         }
     </div>
 }
 else
 {
-    <button onclick="@ViewModel.OnLoginClicked">Login with Discord</button>
+    <button @onclick="@ViewModel.OnLoginClicked">Login with Discord</button>
 }
 
 @functions {

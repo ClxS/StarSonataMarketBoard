@@ -12,14 +12,14 @@
     class ItemsResultsViewModel : IItemsResultsViewModel
     {
         private readonly INavigationService navigationService;
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
         private readonly ISearchService searchService;
 
         private readonly Subject<bool> visibilityChangeSubject;
 
         private bool isVisible = true;
 
-        public ItemsResultsViewModel(ISearchService searchService, INavigationService navigationService, IUriHelper uriHelper)
+        public ItemsResultsViewModel(ISearchService searchService, INavigationService navigationService, NavigationManager uriHelper)
         {
             this.searchService = searchService;
             this.navigationService = navigationService;

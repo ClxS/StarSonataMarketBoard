@@ -9,11 +9,11 @@
 
     class RecentItemsViewModel : IRecentItemsViewModel
     {
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
         private readonly Subject<RecentItem[]> resultsChangedSubject;
         private RecentItem[] results;
 
-        public RecentItemsViewModel(IItemsService itemsService, IUriHelper uriHelper)
+        public RecentItemsViewModel(IItemsService itemsService, NavigationManager uriHelper)
         {
             this.uriHelper = uriHelper;
             this.resultsChangedSubject = new Subject<RecentItem[]>();

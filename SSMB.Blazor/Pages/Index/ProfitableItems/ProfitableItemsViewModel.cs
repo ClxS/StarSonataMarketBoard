@@ -10,11 +10,11 @@
 
     class ProfitableItemsViewModel : IProfitableItemsViewModel
     {
-        private readonly IUriHelper uriHelper;
+        private readonly NavigationManager uriHelper;
         private readonly Subject<ItemProfit[]> resultsChangedSubject;
         private ItemProfit[] results;
 
-        public ProfitableItemsViewModel(IItemsService itemsService, IUriHelper uriHelper)
+        public ProfitableItemsViewModel(IItemsService itemsService, NavigationManager uriHelper)
         {
             this.uriHelper = uriHelper;
             this.resultsChangedSubject = new Subject<ItemProfit[]>();

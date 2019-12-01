@@ -29,14 +29,14 @@
 
 @functions {
     [Parameter]
-    private FullDetailItem Item { get; set; }
+    public FullDetailItem Item { get; set; }
 
     [Parameter]
-    private OrderType Type { get; set; }
+    public OrderType Type { get; set; }
 
-    protected override void OnInit()
+    protected override void OnInitialized()
     {
-        this.ViewModel.WhenOrderedEntriesUpdated.Subscribe(_ => Invoke(StateHasChanged));
+        this.ViewModel.WhenOrderedEntriesUpdated.Subscribe(_ => InvokeAsync(StateHasChanged));
     }
 
     protected override void OnParametersSet()  

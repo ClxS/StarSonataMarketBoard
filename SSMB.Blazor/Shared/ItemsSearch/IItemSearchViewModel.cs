@@ -8,7 +8,7 @@
 
         void OnClick();
 
-        void OnInput(UIChangeEventArgs args);
+        void OnInput(ChangeEventArgs args);
 
         void OnInputFocus();
     }

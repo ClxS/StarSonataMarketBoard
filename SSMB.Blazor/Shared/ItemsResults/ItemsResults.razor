@@ -3,10 +3,10 @@
 
 @if (ViewModel.IsVisible && ViewModel.Results != null)
 {
-    <div onclick="@ViewModel.OnWrapperClick" class="item-results-wrapper">
+    <div @onclick="@ViewModel.OnWrapperClick" class="item-results-wrapper">
         @foreach (var item in ViewModel.Results)
         {
-            <div class="results-item" onclick="@(() => ViewModel.OnItemClicked(item.ItemId))">
+            <div class="results-item" @onclick="@(() => ViewModel.OnItemClicked(item.ItemId))">
                 <div class="results-item-rarity"></div>
                 <div class="results-item-name">
                     @item.Name
@@ -21,12 +21,12 @@
 
 @functions {
 
-    protected override Task OnInitAsync()
+    protected override Task OnInitializedAsync()
     {
         ViewModel.WhenVisibilityChanged
-                 .Subscribe(_ => { Invoke(StateHasChanged); });
+                 .Subscribe(_ => { InvokeAsync(StateHasChanged); });
         ViewModel.WhenResultsChanged
-                 .Subscribe(_ => { Invoke(StateHasChanged); });
+                 .Subscribe(_ => { InvokeAsync(StateHasChanged); });
 
         return Task.CompletedTask;
     }
