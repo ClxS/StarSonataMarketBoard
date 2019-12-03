@@ -68,7 +68,7 @@
             Ready,
         }
 
-        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(4);
+        public TimeSpan Throttle { get; } = TimeSpan.FromSeconds(1);
 
         private EAppState AppState { get; set; } = EAppState.WaitingForLogin;
 
