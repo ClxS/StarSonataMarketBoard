@@ -7,12 +7,10 @@ This project served as a toy to get used to using server-side Blazor, so sorry f
 
 ## To Use
 
-- Setup a SqlServer and modify the appsettings.json to point towards it
-- Open a command prompt in `./SSMB.SQL`
-- Run `dotnet ef update database`
-- Create an account at Star Sonata for the purpose of market checking
-- Enter the account details in appsettings.json
-- Open the .sln and launch the SSML.Blazor application
+- Open a command prompt in SSMB.Blazor
+- Enter `docker run`
+- The server should start up, and your browser should open at `http://localhost:5050`.
+- It will take a while before items begin to populate as it has to first go through all known items and check whether they're on the market before they will appear. You can view the background task process at http://localhost:5050/hangfire. I recommend just leaving it running in the background constantly.
 
 ## Known Issues
 
