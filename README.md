@@ -24,6 +24,8 @@ I'll add an index at some point, but these are the main functions:
 * Appraise - http://localhost:5050/Appraise
     * Enter an item list (in the same format as copy/pasting your ingame inventory provides) and it will check against the most recent /mc results for each item to determine the best sale prices you can fetch for those items. It will display the quantity each shop will take as of the last check, and the order in which to sell to maximise profits. Don't trust it for items who's prices vary on supply like ICs as it'll be wrong.
     
+* UnderCut - http://localhost:5050/UnderCut
+    * Helps you undercut everyone else! Paste an inventory copy + paste, recieve a tradebay import formatted list of prices
 
 ## Known Issues
 
