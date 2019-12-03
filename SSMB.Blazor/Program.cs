@@ -1,5 +1,7 @@
 namespace SSMB.Blazor
 {
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
@@ -11,6 +13,8 @@ namespace SSMB.Blazor
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel();
+                    webBuilder.UseUrls("http://localhost:5050");
                     webBuilder.ConfigureLogging((context, logging) =>
                     {
                         logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);

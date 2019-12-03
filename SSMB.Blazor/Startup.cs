@@ -1,9 +1,11 @@
 namespace SSMB.Blazor
 {
     using System;
+    using System.Diagnostics;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Security.Claims;
     using System.Text.Json;
     using Application.Infrastructure;
@@ -58,9 +60,26 @@ namespace SSMB.Blazor
             this.Configuration = configuration;
             this.sqlliteConnection = new SqliteConnection(this.Configuration.GetConnectionString(DbConnectionKey));
             this.sqlliteConnection.Open(); // TODO[CJ] Bad!
+            OpenBrowser("http://localhost:5050/");
         }
 
         public IConfiguration Configuration { get; }
+
+        private static void OpenBrowser(string url)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
