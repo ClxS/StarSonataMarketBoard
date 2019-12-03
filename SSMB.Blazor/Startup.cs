@@ -147,8 +147,8 @@ namespace SSMB.Blazor
                             options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                             options.DefaultChallengeScheme = "Discord";
                         })
-                        .AddCookie()
-                        .AddOAuth("Discord", options =>
+                        .AddCookie();
+                        /*.AddOAuth("Discord", options =>
                         {
                             options.ClientId = this.Configuration["Discord:ClientId"];
                             options.ClientSecret = this.Configuration["Discord:ClientSecret"];
@@ -177,7 +177,7 @@ namespace SSMB.Blazor
                                     context.RunClaimActions(user.RootElement);
                                 }
                             };
-                        });
+                        });*/
             services.AddSingleton<ILoginCredentials>(_ =>
             {
                 var credentialsSection = this.Configuration.GetSection("Credentials");
