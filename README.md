@@ -26,6 +26,9 @@ I'll add an index at some point, but these are the main functions:
     
 * UnderCut - http://localhost:5050/UnderCut
     * Helps you undercut everyone else! Paste an inventory copy + paste, recieve a tradebay import formatted list of prices
+    
+* Scrappable - http://localhost:5050/Scrappable
+    * Gives you a tradebay import text which contains every single scrappable item, set to buy at 75% of the actual scrap price. I realise now this tool is out I probably can't use this for profit anymore...
 
 ## Known Issues
 
