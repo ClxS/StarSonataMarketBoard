@@ -111,7 +111,7 @@ namespace SSMB.Blazor
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
             services.AddDbContext<ISsmbDbContext, SsmbDbContext>(options =>
-                options.UseSqlite(this.Configuration.GetConnectionString(DbConnectionKey)));
+                options.UseSqlite(this.Configuration.GetConnectionString(DbConnectionKey)), ServiceLifetime.Transient);
             this.RegisterHangfireTypes(services);
             this.RegisterMediatRType(services);
             services.AddHttpClient();
@@ -208,11 +208,8 @@ namespace SSMB.Blazor
 
         private void RegisterHangfireTypes(IServiceCollection services)
         {
-            services.AddHangfire(x =>
-            {
-               
-            });
-            JobStorage.Current = new SQLiteStorage(this.sqlliteConnection, new SQLiteStorageOptions());
+            services.AddHangfire(x => { x.UseSQLiteStorage(this.Configuration.GetConnectionString("SSMBDatabase")); });
+            JobStorage.Current = new SQLiteStorage(this.Configuration.GetConnectionString("SSMBDatabase"), new SQLiteStorageOptions());
         }
 
         private void RegisterMediatRType(IServiceCollection services)

@@ -28,7 +28,7 @@
             Console.WriteLine("Preparing Hangfire");
             Console.ForegroundColor = ConsoleColor.White;
 
-            var timer = new Timer(10000);
+            var timer = new Timer(5000);
             timer.AutoReset = false;
             timer.Elapsed += this.TimerOnElapsed;
             timer.Start();

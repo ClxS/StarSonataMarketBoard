@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Hangfire" Version="1.7.7" />
-    <PackageReference Include="Hangfire.SQLite" Version="1.4.2" />
+    <PackageReference Include="Hangfire.LiteDB" Version="0.3.0" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\External\HangfireExtension-master\src\Hangfire.SQLite\Hangfire.SQLite.csproj" />
     <ProjectReference Include="..\SSMB.DataCollection\SSMB.DataCollection.csproj" />
     <ProjectReference Include="..\SSMB.Domain\SSMB.Domain.csproj" />
     <ProjectReference Include="..\SSMB.Server\SSMB.Server.csproj" />

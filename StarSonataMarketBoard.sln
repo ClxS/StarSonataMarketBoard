@@ -40,6 +40,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{9625
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpdateItemList", "UpdateItemList\UpdateItemList.csproj", "{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{80E698B2-D993-4F19-AA55-A3E4D034309F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.SQLite", "External\HangfireExtension-master\src\Hangfire.SQLite\Hangfire.SQLite.csproj", "{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +82,10 @@ Global
 		{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +104,7 @@ Global
 		{D05E2BE0-8C46-42FA-BCA7-2AAE887F5F9C} = {E20D4063-0EE3-4D60-A839-BD50EEEE6732}
 		{962580C4-445C-478F-AAF9-FEC2D4BA6500} = {D5FDE5E4-9836-4D39-B59E-C4D5DA1D462C}
 		{EE5C9F3A-458C-4CA8-84EF-D68B4CC771CE} = {962580C4-445C-478F-AAF9-FEC2D4BA6500}
+		{3D0D6680-E4E8-4A97-ACC9-5EBB921CEE19} = {80E698B2-D993-4F19-AA55-A3E4D034309F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4BA96C81-7937-407D-8617-FDEC77236579}

@@ -10,9 +10,12 @@
         {
             builder.RegisterType<TemporaryItemsProvider>().As<IItemProvider>();
             builder.RegisterType<DataCollection.DataCollectionService>().AsImplementedInterfaces();
-            builder.RegisterType<StarSonataApi>().SingleInstance()
+            builder.RegisterType<StarSonataApi>()
+                   .SingleInstance()
                    .WithParameter(new TypedParameter(typeof(string), "liberty.starsonata.com"));
-            builder.RegisterType<MarketCheckService>().As<IMarketCheckService>().SingleInstance();
+            builder.RegisterType<MarketCheckService>()
+                   .As<IMarketCheckService>()
+                   .SingleInstance();
         }
     }
 }
