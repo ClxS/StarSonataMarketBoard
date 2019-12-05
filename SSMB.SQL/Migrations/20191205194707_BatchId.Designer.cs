@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SSMB.SQL;
 
 namespace SSMB.SQL.Migrations
 {
     [DbContext(typeof(SsmbDbContext))]
-    partial class SsmbDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191205194707_BatchId")]
+    partial class BatchId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
