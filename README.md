@@ -7,6 +7,7 @@ This project served as a toy to get used to using server-side Blazor, so sorry f
 
 ## To Use
 
+- Enter your Game login credentials in 'SSMB.Blazor/appsettings.json' (Probably best to make a separate account specifically for this purpose, both for security and to let you login to the game using an ordinary client)
 - Open a command prompt in SSMB.Blazor
 - Enter `dotnet run`
 - The server should start up, and your browser should open at `http://localhost:5050`.
